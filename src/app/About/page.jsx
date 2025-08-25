@@ -1,6 +1,8 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import NavBar2 from "../components/NavBar2";
+import Footer from "../components/Footer";
 
 
 const AboutPage = () => {
@@ -35,6 +37,7 @@ const AboutPage = () => {
 
   return (
     <main className="min-h-screen bg-black text-white pt-20">
+      <NavBar2 />
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-green-900/20 to-black"></div>
@@ -178,6 +181,7 @@ const AboutPage = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </main>
   );
 };

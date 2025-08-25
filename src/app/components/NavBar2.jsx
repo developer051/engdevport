@@ -19,11 +19,11 @@ const NavBar2 = () => {
               <Link href="/" className="text-gray-300 hover:text-gray-400 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">
                 Home
               </Link>
-              <Link href="/about" className="text-gray-300 hover:text-gray-400 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">
+              <Link href="/About" className="text-gray-300 hover:text-gray-400 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">
                 About
               </Link>
-              <Link href="/projects" className="text-gray-300 hover:text-gray-400 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">
-                Projects
+              <Link href="/labs" className="text-gray-300 hover:text-gray-400 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">
+                Labs
               </Link>
               <Link href="/contact" className="text-gray-300 hover:text-gray-400 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">
                 Contact
@@ -77,8 +77,8 @@ const NavBar2 = () => {
             <Link href="/about" className="text-gray-600 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
               About
             </Link>
-            <Link href="/projects" className="text-gray-600 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
-              Projects
+            <Link href="/labs" className="text-gray-600 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
+              Labs
             </Link>
             <Link href="/contact" className="text-gray-600 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
               Contact
