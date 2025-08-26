@@ -10,7 +10,7 @@ const NavBar2 = () => {
   };
 
   return (
-    <nav className="bg-black shadow-lg fixed w-full z-10">
+    <nav className="bg-gray-900 shadow-lg fixed w-full z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Left side - Menu Links */}
@@ -33,6 +33,18 @@ const NavBar2 = () => {
                 className="text-gray-300 hover:text-gray-400 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out"
               >
                 Labs
+              </Link>
+              <Link
+                href="/gallery"
+                className="text-gray-300 hover:text-gray-400 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out"
+              >
+                Gallery
+              </Link>
+              <Link
+                href="/staff"
+                className="text-gray-300 hover:text-gray-400 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out"
+              >
+                Staff
               </Link>
               <Link
                 href="/Contact"
@@ -115,6 +127,18 @@ const NavBar2 = () => {
               className="text-gray-600 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium"
             >
               Labs
+            </Link>
+            <Link
+              href="/gallery"
+              className="text-gray-600 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium"
+            >
+              Gallery
+            </Link>
+            <Link
+              href="/staff"
+              className="text-gray-600 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium"
+            >
+              Staff
             </Link>
             <Link
               href="/contact"

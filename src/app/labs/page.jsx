@@ -48,7 +48,9 @@ export default function LabsPage() {
               Labs <span className="text-green-400">Projects</span>
             </h1>
             <p className="text-gray-300 mt-3">
-              งานทดลองและโปรเจกต์ด้าน Data Analytics, Cybersecurity และ AI
+              <span className="react-text-animation">
+                งานทดลองและโปรเจกต์ด้าน Data Analytics, Cybersecurity และ AI
+              </span>
             </p>
           </div>
 
