@@ -10,7 +10,7 @@ const LAB_SECTIONS = [
     title: "Data Analytics",
     description:
       "สำรวจข้อมูล สร้างแดชบอร์ด และสร้างอินไซต์ที่ขับเคลื่อนการตัดสินใจ",
-    image: "/file.svg",
+    image: "/ds.jpg",
     items: [
       "ETL/ELT Pipeline",
       "Dashboard & Visualization",
@@ -22,7 +22,7 @@ const LAB_SECTIONS = [
     title: "Cybersecurity",
     description:
       "ทดสอบความปลอดภัย ประเมินความเสี่ยง และออกแบบมาตรการป้องกันระบบ",
-    image: "/window.svg",
+    image: "/cs.jpg",
     items: ["Vulnerability Scan", "Pentest Basics", "Security Hardening"],
   },
   {
@@ -30,7 +30,7 @@ const LAB_SECTIONS = [
     title: "AI & ML",
     description:
       "สร้างโมเดลแมชชีนเลิร์นนิง ทดลอง LLM และทำงานประมวลผลภาษาธรรมชาติ",
-    image: "/globe.svg",
+    image: "/ai.jpg",
     items: ["Classification/Regression", "LLM Prototyping", "NLP Pipelines"],
   },
 ];

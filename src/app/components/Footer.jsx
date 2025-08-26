@@ -124,7 +124,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/contact"
+                  href="/Contact"
                   className="text-gray-300 hover:text-green-400 transition-colors"
                 >
                   Contact
