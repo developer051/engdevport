@@ -22,7 +22,7 @@ const StaffPage = () => {
       id: 2,
       name: "ANN RICHMOND",
       position: "creative leader", 
-      image: "/ai.jpg",
+      image: "/staff/staff1.jpeg",
       description: "Glavi amet ritnisl libero molestie ante ut fringilla purus eros quis glavrid from dolor amet iquam lorem bibendum",
       social: {
         facebook: "#",
@@ -34,7 +34,7 @@ const StaffPage = () => {
       id: 3,
       name: "BOB GREENFIELD",
       position: "programming guru",
-      image: "/cs.jpg", 
+      image: "/staff/staff2.jpeg",
       description: "Glavi amet ritnisl libero molestie ante ut fringilla purus eros quis glavrid from dolor amet iquam lorem bibendum",
       social: {
         facebook: "#",
@@ -46,7 +46,31 @@ const StaffPage = () => {
       id: 4,
       name: "SARAH WILSON",
       position: "data scientist",
-      image: "/ds.jpg", 
+      image: "/staff/staff3.jpeg", 
+      description: "Glavi amet ritnisl libero molestie ante ut fringilla purus eros quis glavrid from dolor amet iquam lorem bibendum",
+      social: {
+        facebook: "#",
+        twitter: "#",
+        instagram: "#"
+      }
+    },
+    {
+      id: 5,
+      name: "MICHAEL CHEN",
+      position: "ui/ux designer",
+      image: "/staff/staff4.jpeg",
+      description: "Glavi amet ritnisl libero molestie ante ut fringilla purus eros quis glavrid from dolor amet iquam lorem bibendum",
+      social: {
+        facebook: "#",
+        twitter: "#",
+        instagram: "#"
+      }
+    },
+    {
+      id: 6,
+      name: "EMMA THOMPSON",
+      position: "project manager",
+      image: "/staff/staff5.jpeg",
       description: "Glavi amet ritnisl libero molestie ante ut fringilla purus eros quis glavrid from dolor amet iquam lorem bibendum",
       social: {
         facebook: "#",
