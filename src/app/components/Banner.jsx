@@ -49,7 +49,7 @@ const Banner = () => {
     },
   };
 
-  const title = "Welcome to EngDev Portfolio";
+  const title = "Welcome Rabbit Runners";
   const words = title.split(" ");
 
   return (
@@ -68,8 +68,8 @@ const Banner = () => {
         ></div>
         {/* Fallback background image */}
 
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
+        {/* Light Overlay */}
+        <div className="absolute inset-0 bg-white bg-opacity-90 z-10"></div>
       </div>
 
       {/* Content Container */}
@@ -83,7 +83,7 @@ const Banner = () => {
           {/* Text Content - Centered */}
           <div className="text-center max-w-4xl mx-auto">
             <motion.h1
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 leading-tight"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4 sm:mb-6 leading-tight"
               variants={titleVariants}
               initial="hidden"
               animate="visible"
@@ -93,7 +93,7 @@ const Banner = () => {
                   key={index}
                   variants={letterVariants}
                   className={`inline-block mr-2 ${
-                    word === "EngDev" ? "text-green-400" : ""
+                    word === "EngDev" ? "text-orange-400" : ""
                   }`}
                 >
                   {word}
@@ -101,39 +101,32 @@ const Banner = () => {
               ))}
             </motion.h1>
             <motion.p
-              className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 mb-6 sm:mb-8 leading-relaxed px-4"
+              className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 mb-6 sm:mb-8 leading-relaxed px-4"
               variants={itemVariants}
             >
-              I am a full-stack developer passionate about creating innovative
-              web solutions,{" "}
-              <span className="text-green-400 font-semibold">
-                Data Analytics
+              Join a community of driven runners, united by speed, spirit, and the thrill of the run. Whether you're chasing personal bests or just chasing the sunrise, RabbitLife Runners Club is your starting line.,{" "}
+              <span className="text-orange-400 font-semibold">
+                RabbitLife 
               </span>
-              ,{" "}
-              <span className="text-green-400 font-semibold">
-                Cybersecurity
-              </span>{" "}
-              and
-              <span className="text-green-400 font-semibold"> AI </span>
-              delivering exceptional user experiences.
+              Runners
             </motion.p>
             <motion.div
               className="flex flex-col sm:flex-row gap-4 justify-center items-center"
               variants={itemVariants}
             >
               <motion.button
-                className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition duration-300 transform hover:scale-105"
+                className="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-medium transition duration-300 transform hover:scale-105"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                View Projects
+                ส่งผลการวิ่ง
               </motion.button>
               <motion.button
-                className="w-full sm:w-auto bg-transparent border-2 border-green-400 text-green-400 px-6 py-3 rounded-lg font-medium hover:bg-green-400 hover:text-black transition duration-300 transform hover:scale-105"
+                className="w-full sm:w-auto bg-transparent border-2 border-yellow-500 text-yellow-600 px-6 py-3 rounded-lg font-medium hover:bg-yellow-500 hover:text-white transition duration-300 transform hover:scale-105"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                Contact Me
+                Leaderboard
               </motion.button>
             </motion.div>
           </div>
