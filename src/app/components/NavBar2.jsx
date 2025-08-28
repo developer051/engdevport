@@ -50,7 +50,7 @@ const NavBar2 = () => {
             <div className="hidden md:flex space-x-8">
                              <Link
                  href="/"
-                 className="text-gray-600 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 ease-in-out relative group"
+                 className="text-gray-600 hover:text-orange-500 px-3 py-2 rounded-md text-lg font-medium transition-all duration-300 ease-in-out relative group"
                >
                  <span className="relative z-10">Home</span>
                  <span className="absolute inset-0 bg-orange-100 rounded-md transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
@@ -58,28 +58,28 @@ const NavBar2 = () => {
 
                              <Link
                  href="/gallery"
-                 className="text-gray-600 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 ease-in-out relative group"
+                 className="text-gray-600 hover:text-orange-500 px-3 py-2 rounded-md text-lg font-medium transition-all duration-300 ease-in-out relative group"
                >
                  <span className="relative z-10">Gallery</span>
                  <span className="absolute inset-0 bg-orange-100 rounded-md transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
                </Link>
                              <Link
                  href="/staff"
-                 className="text-gray-600 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 ease-in-out relative group"
+                 className="text-gray-600 hover:text-orange-500 px-3 py-2 rounded-md text-lg font-medium transition-all duration-300 ease-in-out relative group"
                >
-                 <span className="relative z-10">Rabbit Members</span>
+                 <span className="relative z-10">Rabbit Runners</span>
                  <span className="absolute inset-0 bg-orange-100 rounded-md transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
                </Link>
                              <Link
                  href="/leaderboard"
-                 className="text-gray-600 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 ease-in-out relative group"
+                 className="text-gray-600 hover:text-orange-500 px-3 py-2 rounded-md text-lg font-medium transition-all duration-300 ease-in-out relative group"
                >
                  <span className="relative z-10">Leaderboard</span>
                  <span className="absolute inset-0 bg-orange-100 rounded-md transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
                </Link>
                              <Link
                  href="/running-result"
-                 className="text-gray-600 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 ease-in-out relative group"
+                 className="text-gray-600 hover:text-orange-500 px-3 py-2 rounded-md text-lg font-medium transition-all duration-300 ease-in-out relative group"
                >
                  <span className="relative z-10">ส่งผลการวิ่ง</span>
                  <span className="absolute inset-0 bg-orange-100 rounded-md transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
@@ -97,13 +97,13 @@ const NavBar2 = () => {
                      src={user.profileImage || "/supachai.jpg"}
                      alt={`${user.firstName} ${user.lastName}`}
                    />
-                   <span className="text-gray-700 font-medium">
+                   <span className="text-gray-700 font-medium text-lg">
                      สวัสดี, {user.firstName}
                    </span>
                  </div>
                                     <button
                      onClick={handleLogout}
-                     className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm font-medium transition-all duration-300 ease-in-out hover:shadow-lg transform hover:-translate-y-0.5"
+                     className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-lg font-medium transition-all duration-300 ease-in-out hover:shadow-lg transform hover:-translate-y-0.5"
                    >
                      ออกจากระบบ
                    </button>
@@ -112,13 +112,13 @@ const NavBar2 = () => {
               <div className="flex items-center space-x-2">
                                  <Link
                    href="/login"
-                   className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-md text-sm font-medium transition-all duration-300 ease-in-out hover:shadow-lg transform hover:-translate-y-0.5"
+                   className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-md text-lg font-medium transition-all duration-300 ease-in-out hover:shadow-lg transform hover:-translate-y-0.5"
                  >
                    เข้าสู่ระบบ
                  </Link>
                                  <Link
                    href="/register"
-                   className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-md text-sm font-medium transition-all duration-300 ease-in-out hover:shadow-lg transform hover:-translate-y-0.5"
+                   className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-md text-lg font-medium transition-all duration-300 ease-in-out hover:shadow-lg transform hover:-translate-y-0.5"
                  >
                    สมัครสมาชิก
                  </Link>
@@ -160,32 +160,32 @@ const NavBar2 = () => {
            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white/95 backdrop-blur-md border-t border-orange-100 shadow-lg">
                          <Link
                href="/"
-               className="text-gray-600 hover:text-orange-500 hover:bg-orange-50 block px-3 py-2 rounded-md text-base font-medium transition-all duration-300"
+               className="text-gray-600 hover:text-orange-500 hover:bg-orange-50 block px-3 py-2 rounded-md text-xl font-medium transition-all duration-300"
              >
                Home
              </Link>
 
                          <Link
                href="/gallery"
-               className="text-gray-600 hover:text-orange-500 hover:bg-orange-50 block px-3 py-2 rounded-md text-base font-medium transition-all duration-300"
+               className="text-gray-600 hover:text-orange-500 hover:bg-orange-50 block px-3 py-2 rounded-md text-xl font-medium transition-all duration-300"
              >
                Gallery
              </Link>
                          <Link
                href="/staff"
-               className="text-gray-600 hover:text-orange-500 hover:bg-orange-50 block px-3 py-2 rounded-md text-base font-medium transition-all duration-300"
+               className="text-gray-600 hover:text-orange-500 hover:bg-orange-50 block px-3 py-2 rounded-md text-xl font-medium transition-all duration-300"
              >
                Rabbit Members
              </Link>
                          <Link
                href="/leaderboard"
-               className="text-gray-600 hover:text-orange-500 hover:bg-orange-50 block px-3 py-2 rounded-md text-base font-medium transition-all duration-300"
+               className="text-gray-600 hover:text-orange-500 hover:bg-orange-50 block px-3 py-2 rounded-md text-xl font-medium transition-all duration-300"
              >
                Leaderboard
              </Link>
                          <Link
                href="/running-result"
-               className="text-gray-600 hover:text-orange-500 hover:bg-orange-50 block px-3 py-2 rounded-md text-base font-medium transition-all duration-300"
+               className="text-gray-600 hover:text-orange-500 hover:bg-orange-50 block px-3 py-2 rounded-md text-xl font-medium transition-all duration-300"
              >
                ส่งผลการวิ่ง
              </Link>
@@ -199,13 +199,13 @@ const NavBar2 = () => {
                      src={user.profileImage || "/supachai.jpg"}
                      alt={`${user.firstName} ${user.lastName}`}
                    />
-                   <div className="text-gray-700 text-sm font-medium">
+                   <div className="text-gray-700 text-lg font-medium">
                      สวัสดี, {user.firstName}
                    </div>
                  </div>
                                     <button
                      onClick={handleLogout}
-                     className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm font-medium w-full transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5"
+                     className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-lg font-medium w-full transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5"
                    >
                      ออกจากระบบ
                    </button>
@@ -214,13 +214,13 @@ const NavBar2 = () => {
               <div className="px-3 py-2 space-y-2">
                                  <Link
                    href="/login"
-                   className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-md text-sm font-medium block text-center transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5"
+                   className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-md text-lg font-medium block text-center transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5"
                  >
                    เข้าสู่ระบบ
                  </Link>
                                  <Link
                    href="/register"
-                   className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-md text-sm font-medium block text-center transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5"
+                   className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-md text-lg font-medium block text-center transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5"
                  >
                    สมัครสมาชิก
                  </Link>

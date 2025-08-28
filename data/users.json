@@ -6,10 +6,10 @@
     "loginName": "aaa",
     "department": "Software Engineering",
     "password": "$2b$12$NkoYsPr4.ELckR57VI.r7.PcVvfD6XR00W9VpmordGwZpe2MvYskm",
-    "score": 100,
+    "score": 150,
     "isActive": true,
     "createdAt": "2025-08-27T06:30:25.423Z",
-    "updatedAt": "2025-08-27T07:17:33.611Z"
+    "updatedAt": "2025-08-28T09:02:21.789Z"
   },
   {
     "id": "1756276292306jspqquw7h",
@@ -64,5 +64,19 @@
     "isActive": false,
     "createdAt": "2025-08-27T08:20:00.000Z",
     "updatedAt": "2025-08-27T08:20:00.000Z"
+  },
+  {
+    "id": "1756372177715mh4o2feh0",
+    "firstName": "supachai",
+    "lastName": "ocharos",
+    "loginName": "supachai",
+    "department": "Information Technology",
+    "password": "$2b$12$OMFjU/nA5F/vRU.2d742..jxWTmE6qHINlSrd1KT2i3VEH6svbhZW",
+    "profileImage": "/uploads/profiles/supachai_1756372177452.jpg",
+    "messageToRunners": "นักวิ่งหน้ามล คนหน้าหวาน",
+    "score": 0,
+    "isActive": true,
+    "createdAt": "2025-08-28T09:09:37.715Z",
+    "updatedAt": "2025-08-28T09:09:37.715Z"
   }
 ]

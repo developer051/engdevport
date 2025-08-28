@@ -29,7 +29,13 @@ export default function GalleryUploadPage() {
         });
         
         if (response.ok) {
-          setIsLoggedIn(true);
+          const data = await response.json();
+          if (data.success) {
+            setIsLoggedIn(true);
+          } else {
+            // ถ้าไม่ได้ login ให้ redirect ไปหน้า login
+            router.push('/login?redirect=/gallery/upload&message=กรุณาเข้าสู่ระบบเพื่ออัปโหลดภาพ');
+          }
         } else {
           // ถ้าไม่ได้ login ให้ redirect ไปหน้า login
           router.push('/login?redirect=/gallery/upload&message=กรุณาเข้าสู่ระบบเพื่ออัปโหลดภาพ');
@@ -108,7 +114,8 @@ export default function GalleryUploadPage() {
 
       const response = await fetch('/api/gallery', {
         method: 'POST',
-        body: submitData
+        body: submitData,
+        credentials: 'include'
       });
 
       const result = await response.json();

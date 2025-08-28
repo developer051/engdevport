@@ -11,11 +11,31 @@ export async function POST(request) {
     // ตรวจสอบ session/login
     const { cookies } = await import('next/headers');
     const cookieStore = cookies();
-    const sessionToken = cookieStore.get('sessionToken');
+    const token = cookieStore.get('token');
     
-    if (!sessionToken) {
+    if (!token) {
       return NextResponse.json(
         { error: 'กรุณาเข้าสู่ระบบก่อนอัปโหลดภาพ' },
+        { status: 401 }
+      );
+    }
+
+    // ตรวจสอบ JWT token
+    try {
+      const jwt = await import('jsonwebtoken');
+      const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+      
+      const decoded = jwt.verify(token.value, JWT_SECRET);
+      if (!decoded || !decoded.userId) {
+        return NextResponse.json(
+          { error: 'เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่' },
+          { status: 401 }
+        );
+      }
+    } catch (authError) {
+      console.error('Token verification error:', authError);
+      return NextResponse.json(
+        { error: 'เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่' },
         { status: 401 }
       );
     }

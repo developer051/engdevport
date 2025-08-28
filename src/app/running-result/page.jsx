@@ -273,6 +273,7 @@ export default function RunningResultPage() {
                         </svg>
                         <p className="text-lg font-medium">คลิกเพื่อเลือกภาพ</p>
                         <p className="text-sm">หรือลากไฟล์มาวางที่นี่</p>
+                        <p className="text-sm">ขอภาพที่มองเห็น วันที่ ระยะทาง และ เวลาที่ใช้วิ่ง</p>
                         <p className="text-xs text-gray-500 mt-2">รองรับไฟล์ JPG, PNG ขนาดไม่เกิน 5MB</p>
                       </div>
                     </label>
