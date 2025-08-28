@@ -75,14 +75,34 @@ const Banner = () => {
 
       {/* Content Container */}
       <motion.div
-        className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-20"
+        className="relative h-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 z-20"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
         <div className="flex items-center justify-center h-screen pt-16">
-          {/* Text Content - Centered */}
-          <div className="text-center max-w-4xl mx-auto">
+          {/* Main Content Container - Two Column Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center max-w-6xl mx-auto w-full">
+            
+            {/* Image Section - Left Side */}
+            <motion.div 
+              className="flex justify-center lg:justify-center items-center order-2 lg:order-1"
+              variants={itemVariants}
+            >
+              <div className="relative">
+                <motion.img
+                  src="/rabbittran.png"
+                  alt="RabbitLife Runner"
+                  className="max-w-full h-auto max-h-[800px] lg:max-h-[1000px] w-full object-contain opacity-60"
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={{ opacity: 0.6, x: 0 }}
+                  transition={{ duration: 0.8, delay: 0.5 }}
+                />
+              </div>
+            </motion.div>
+
+            {/* Text Content - Right Side */}
+            <div className="text-center lg:text-left order-1 lg:order-2">
             <motion.h1
               className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4 sm:mb-6 leading-tight"
               variants={titleVariants}
@@ -112,7 +132,7 @@ const Banner = () => {
               Runners
             </motion.p>
             <motion.div
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center"
               variants={itemVariants}
             >
               <Link href="/running-result">
@@ -134,6 +154,7 @@ const Banner = () => {
               </motion.button>
               </Link>
             </motion.div>
+            </div>
           </div>
         </div>
       </motion.div>

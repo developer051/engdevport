@@ -152,10 +152,19 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-12 pt-8">
-          <p className="text-right text-gray-400 text-sm">
-            © {new Date().getFullYear()}{" "}
-            <span className="text-green-900">Developed by Supachai.O</span>
-          </p>
+          <div className="flex flex-col sm:flex-row justify-between items-center">
+            <p className="text-gray-400 text-sm mb-4 sm:mb-0">
+              © {new Date().getFullYear()}{" "}
+              <span className="text-green-900">Developed by Supachai.O</span>
+            </p>
+            <div className="flex items-center">
+              <img
+                src="/rabbitlife-logo.png"
+                alt="RabbitLife Logo"
+                className="h-12 w-auto object-contain"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </footer>

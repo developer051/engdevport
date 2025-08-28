@@ -10,6 +10,8 @@ const GalleryPage = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [autoPlayInterval, setAutoPlayInterval] = useState(null);
 
   // ดึงข้อมูลภาพจาก API
   useEffect(() => {
@@ -60,6 +62,31 @@ const GalleryPage = () => {
     }
   }, [isFullscreen]);
 
+  // Auto-play functionality
+  useEffect(() => {
+    if (isAutoPlaying && images.length > 1 && !isFullscreen) {
+      const interval = setInterval(() => {
+        setSelectedImage((prev) => (prev + 1) % images.length);
+      }, 3000); // เปลี่ยนภาพทุก 3 วินาที
+      
+      setAutoPlayInterval(interval);
+      
+      return () => clearInterval(interval);
+    } else if (autoPlayInterval) {
+      clearInterval(autoPlayInterval);
+      setAutoPlayInterval(null);
+    }
+  }, [isAutoPlaying, images.length, isFullscreen]);
+
+  // หยุด auto-play เมื่อผู้ใช้โต้ตอบ
+  const handleManualNavigation = (callback) => {
+    if (isAutoPlaying) {
+      setIsAutoPlaying(false);
+      setTimeout(() => setIsAutoPlaying(true), 5000); // เริ่ม auto-play อีกครั้งหลัง 5 วินาที
+    }
+    callback();
+  };
+
   return (
     <main className="min-h-screen bg-white text-gray-800">
       <NavBar2 />
@@ -94,6 +121,30 @@ const GalleryPage = () => {
                 <div className="text-sm text-gray-600 font-medium">
                   {selectedImage + 1} / {images.length}
                 </div>
+                
+                {/* Auto-play Control */}
+                {images.length > 1 && (
+                  <button
+                    onClick={() => setIsAutoPlaying(!isAutoPlaying)}
+                    className={`p-2 rounded-lg transition-colors ${
+                      isAutoPlaying 
+                        ? 'bg-orange-500 text-white hover:bg-orange-600' 
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
+                    title={isAutoPlaying ? "หยุดการเลื่อนอัตโนมัติ" : "เริ่มการเลื่อนอัตโนมัติ"}
+                  >
+                    {isAutoPlaying ? (
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                    ) : (
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                  </button>
+                )}
+                
                 <div className="flex space-x-2">
                                      {/* Upload Button */}
                    <Link
@@ -115,28 +166,6 @@ const GalleryPage = () => {
                        />
                      </svg>
                      อัปโหลดภาพ
-                   </Link>
-                   
-                   {/* Login Button (แสดงเมื่อยังไม่ได้ login) */}
-                   <Link
-                     href="/login?redirect=/gallery/upload&message=กรุณาเข้าสู่ระบบเพื่ออัปโหลดภาพ"
-                     className="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-medium rounded-lg transition-colors ml-2"
-                     title="เข้าสู่ระบบเพื่ออัปโหลดภาพ"
-                   >
-                     <svg
-                       className="w-4 h-4 mr-2"
-                       fill="none"
-                       stroke="currentColor"
-                       viewBox="0 0 24 24"
-                     >
-                       <path
-                         strokeLinecap="round"
-                         strokeLinejoin="round"
-                         strokeWidth="2"
-                         d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                       />
-                     </svg>
-                     เข้าสู่ระบบ
                    </Link>
 
                   {/* Thumbnails View Button */}
@@ -199,28 +228,17 @@ const GalleryPage = () => {
                     <svg className="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                                         <p className="text-gray-600 mb-4">ยังไม่มีภาพในแกลเลอรี่</p>
-                     <p className="text-sm text-gray-500 mb-6">เข้าสู่ระบบเพื่อเริ่มอัปโหลดภาพสวยๆ ของคุณ</p>
-                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                       <Link
-                         href="/gallery/upload"
-                         className="inline-flex items-center px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-lg transition-colors"
-                       >
-                         <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                         </svg>
-                         อัปโหลดภาพแรก
-                       </Link>
-                       <Link
-                         href="/login?redirect=/gallery/upload&message=กรุณาเข้าสู่ระบบเพื่ออัปโหลดภาพ"
-                         className="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-medium rounded-lg transition-colors"
-                       >
-                         <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                         </svg>
-                         เข้าสู่ระบบ
-                       </Link>
-                     </div>
+                    <p className="text-gray-600 mb-4">ยังไม่มีภาพในแกลเลอรี่</p>
+                    <p className="text-sm text-gray-500 mb-6">เข้าสู่ระบบเพื่อเริ่มอัปโหลดภาพสวยๆ ของคุณ</p>
+                    <Link
+                      href="/gallery/upload"
+                      className="inline-flex items-center px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-lg transition-colors"
+                    >
+                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      </svg>
+                      อัปโหลดภาพแรก
+                    </Link>
                   </div>
                 </div>
               )}
@@ -238,11 +256,11 @@ const GalleryPage = () => {
                    transition={{ duration: 0.3 }}
                  />
 
-                             {/* Navigation Arrows */}
-               <button
-                 onClick={prevImage}
-                 className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-orange-500 bg-opacity-80 hover:bg-opacity-100 text-white p-3 rounded-full transition-all duration-200 z-10 shadow-lg"
-               >
+                                           {/* Navigation Arrows */}
+              <button
+                onClick={() => handleManualNavigation(prevImage)}
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-orange-500 bg-opacity-80 hover:bg-opacity-100 text-white p-3 rounded-full transition-all duration-200 z-10 shadow-lg"
+              >
                  <svg
                    className="w-6 h-6"
                    fill="none"
@@ -258,10 +276,10 @@ const GalleryPage = () => {
                  </svg>
                </button>
 
-               <button
-                 onClick={nextImage}
-                 className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-orange-500 bg-opacity-80 hover:bg-opacity-100 text-white p-3 rounded-full transition-all duration-200 z-10 shadow-lg"
-               >
+                             <button
+                onClick={() => handleManualNavigation(nextImage)}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-orange-500 bg-opacity-80 hover:bg-opacity-100 text-white p-3 rounded-full transition-all duration-200 z-10 shadow-lg"
+              >
                  <svg
                    className="w-6 h-6"
                    fill="none"
@@ -301,17 +319,17 @@ const GalleryPage = () => {
              <div className="max-w-7xl mx-auto px-4">
                <div className="flex space-x-2 overflow-x-auto pb-2">
                  {images.map((image, index) => (
-                   <motion.button
-                     key={image.id}
-                     onClick={() => setSelectedImage(index)}
-                     className={`flex-shrink-0 relative w-20 h-16 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
-                       index === selectedImage
-                         ? "border-orange-400 shadow-lg shadow-orange-400/50"
-                         : "border-gray-300 hover:border-orange-300"
-                     }`}
-                     whileHover={{ scale: 1.05 }}
-                     whileTap={{ scale: 0.95 }}
-                   >
+                                     <motion.button
+                    key={image.id}
+                    onClick={() => handleManualNavigation(() => setSelectedImage(index))}
+                    className={`flex-shrink-0 relative w-20 h-16 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                      index === selectedImage
+                        ? "border-orange-400 shadow-lg shadow-orange-400/50"
+                        : "border-gray-300 hover:border-orange-300"
+                    }`}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
                      <img
                        src={image.src}
                        alt={image.alt}
@@ -379,7 +397,7 @@ const GalleryPage = () => {
 
             {/* Fullscreen Navigation */}
             <button
-              onClick={prevImage}
+              onClick={() => handleManualNavigation(prevImage)}
               className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-orange-500 bg-opacity-80 hover:bg-opacity-100 text-white p-4 rounded-full shadow-lg"
             >
               <svg
@@ -398,7 +416,7 @@ const GalleryPage = () => {
             </button>
 
             <button
-              onClick={nextImage}
+              onClick={() => handleManualNavigation(nextImage)}
               className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-orange-500 bg-opacity-80 hover:bg-opacity-100 text-white p-4 rounded-full shadow-lg"
             >
               <svg

@@ -29,20 +29,13 @@ export default function GalleryUploadPage() {
         });
         
         if (response.ok) {
-          const data = await response.json();
-          if (data.success) {
-            setIsLoggedIn(true);
-          } else {
-            // ถ้าไม่ได้ login ให้ redirect ไปหน้า login
-            router.push('/login?redirect=/gallery/upload&message=กรุณาเข้าสู่ระบบเพื่ออัปโหลดภาพ');
-          }
+          setIsLoggedIn(true);
         } else {
           // ถ้าไม่ได้ login ให้ redirect ไปหน้า login
           router.push('/login?redirect=/gallery/upload&message=กรุณาเข้าสู่ระบบเพื่ออัปโหลดภาพ');
         }
       } catch (error) {
         console.error('Error checking login status:', error);
-        // ถ้าเกิดข้อผิดพลาดในการตรวจสอบ ให้ redirect ไปหน้า login
         router.push('/login?redirect=/gallery/upload&message=เกิดข้อผิดพลาดในการตรวจสอบสถานะการเข้าสู่ระบบ');
       } finally {
         setLoading(false);
