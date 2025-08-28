@@ -93,7 +93,7 @@ const Banner = () => {
                 <motion.img
                   src="/rabbittran.png"
                   alt="RabbitLife Runner"
-                  className="max-w-full h-auto max-h-[800px] lg:max-h-[1000px] w-full object-contain opacity-60"
+                  className="max-w-full h-auto max-h-[800px] lg:max-h-[1000px] w-full object-contain opacity-100"
                   initial={{ opacity: 0, x: -50 }}
                   animate={{ opacity: 0.6, x: 0 }}
                   transition={{ duration: 0.8, delay: 0.5 }}
@@ -125,7 +125,7 @@ const Banner = () => {
               className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 mb-6 sm:mb-8 leading-relaxed px-4"
               variants={itemVariants}
             >
-              Join a community of driven runners, united by speed, spirit, and the thrill of the run. Whether you're chasing personal bests or just chasing the sunrise, RabbitLife Runners Club is your starting line.,{" "}
+              "No matter if you've run thousands of miles or just taken your first step — we're "RabbitRunners", and we're FastMove together.",{" "}
               <span className="text-orange-400 font-semibold">
                 RabbitLife 
               </span>
