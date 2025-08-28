@@ -1,18 +1,30 @@
 "use client";
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import NavBar2 from "../components/NavBar2";
 import Footer from "../components/Footer";
 
 const LoginPage = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [formData, setFormData] = useState({
     loginName: "",
     password: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+
+  // ตรวจสอบ query parameters สำหรับ redirect และ message
+  useEffect(() => {
+    const redirect = searchParams.get('redirect');
+    const messageParam = searchParams.get('message');
+    
+    if (messageParam) {
+      setMessage(messageParam);
+    }
+  }, [searchParams]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,8 +56,13 @@ const LoginPage = () => {
         // Store user data in localStorage for client-side access
         localStorage.setItem('user', JSON.stringify(data.user));
         
-        // Redirect to home page
-        router.push('/');
+        // ตรวจสอบ redirect URL
+        const redirect = searchParams.get('redirect');
+        if (redirect) {
+          router.push(redirect);
+        } else {
+          router.push('/');
+        }
         router.refresh(); // Refresh to update navigation
       } else {
         setError(data.error || 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ');
@@ -81,6 +98,13 @@ const LoginPage = () => {
       <section className="py-12 sm:py-16">
         <div className="max-w-md mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-lg p-8 shadow-xl border border-gray-200">
+            
+            {/* Message Display */}
+            {message && (
+              <div className="mb-6 p-4 bg-blue-100 border border-blue-300 rounded-lg text-blue-700">
+                {message}
+              </div>
+            )}
             
             {/* Error Message */}
             {error && (

@@ -30,6 +30,19 @@ const RegisterPage = () => {
     "Cybersecurity",
     "Underwriting & Claims  ",
     "Administration",
+    "Agency",
+    "Telemarketing",
+    "Marketing",
+    "Sales",
+    "Customer Service",
+    "HR",
+    "Finance",
+    "Legal",
+    "Risk Management",
+    "Business Development",
+    "Project Management",
+    "Data Analytics",
+    "Data Engineering",
     "Other"
   ];
 

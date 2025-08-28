@@ -42,6 +42,7 @@ const StaffPage = () => {
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">
               Rabbit <span className="text-orange-400">Runners</span>
             </h1>
+            
             <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
               Meet our talented team of Rabbit Members who are passionate about delivering exceptional results
             </p>

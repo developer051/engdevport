@@ -1,0 +1,40 @@
+{
+  "images": [
+    {
+      "id": 1,
+      "src": "/ds.jpg",
+      "alt": "Coastal Village",
+      "title": "Beautiful Coastal Village",
+      "description": "A stunning view of a Mediterranean coastal village with colorful houses and crystal clear waters."
+    },
+    {
+      "id": 2,
+      "src": "/bgb.jpg",
+      "alt": "Mountain Landscape",
+      "title": "Mountain Landscape",
+      "description": "Majestic mountain ranges with dramatic lighting and natural beauty."
+    },
+    {
+      "id": 3,
+      "src": "/engdevopb.png",
+      "alt": "EngDev Portfolio",
+      "title": "Portfolio Design",
+      "description": "Modern web design portfolio showcasing creative digital solutions."
+    },
+    {
+      "id": 4,
+      "src": "/supachai.jpg",
+      "alt": "Professional Portrait",
+      "title": "Professional Portrait",
+      "description": "Professional headshot for business and portfolio use."
+    },
+    {
+      "id": 1756363668386,
+      "src": "/uploads/gallery/1756363668386_4mt1xos2fcv.png",
+      "alt": "วิ่งกัน",
+      "title": "วิ่งกัน",
+      "description": "วิ่งกัน",
+      "uploadedAt": "2025-08-28T06:47:48.389Z"
+    }
+  ]
+}

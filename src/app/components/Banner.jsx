@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const Banner = () => {
   // Animation variants
@@ -114,13 +115,16 @@ const Banner = () => {
               className="flex flex-col sm:flex-row gap-4 justify-center items-center"
               variants={itemVariants}
             >
-              <motion.button
-                className="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-medium transition duration-300 transform hover:scale-105"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                ส่งผลการวิ่ง
-              </motion.button>
+              <Link href="/running-result">
+                <motion.button
+                  className="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-medium transition duration-300 transform hover:scale-105"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  ส่งผลการวิ่ง
+                </motion.button>
+              </Link>
+              <Link href="/leaderboard">
               <motion.button
                 className="w-full sm:w-auto bg-transparent border-2 border-yellow-500 text-yellow-600 px-6 py-3 rounded-lg font-medium hover:bg-yellow-500 hover:text-white transition duration-300 transform hover:scale-105"
                 whileHover={{ scale: 1.05 }}
@@ -128,6 +132,7 @@ const Banner = () => {
               >
                 Leaderboard
               </motion.button>
+              </Link>
             </motion.div>
           </div>
         </div>

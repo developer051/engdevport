@@ -126,8 +126,8 @@ export default function RunningResultPage() {
       <section className="relative py-12 sm:py-16 md:py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-orange-100 to-white"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">
+          <div className="text-left">
+            <h1 className="text-3xl sm:text-4xl md:text-4xl font-bold mb-4 sm:mb-6">
               ส่งผลการ<span className="text-orange-400">วิ่ง</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
@@ -139,8 +139,10 @@ export default function RunningResultPage() {
 
       {/* Running Result Form */}
       <section className="py-12 sm:py-16">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-lg p-8 shadow-xl border border-gray-200">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            {/* Form Section */}
+            <div className="bg-white rounded-lg p-8 shadow-xl border border-gray-200">
             
             {/* Error/Success Messages */}
             {error && (
@@ -322,6 +324,16 @@ export default function RunningResultPage() {
               <Link href="/leaderboard" className="text-sm text-gray-500 hover:text-orange-500">
                 ดูอันดับทั้งหมด
               </Link>
+            </div>
+            </div>
+
+            {/* Image Section */}
+            <div className="flex justify-center items-center">
+              <img 
+                src="/sendnobg.png" 
+                alt="Running Illustration" 
+                className="max-w-full h-auto max-h-200 object-contain opacity-50"
+              />
             </div>
           </div>
         </div>
