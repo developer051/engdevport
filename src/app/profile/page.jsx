@@ -1,27 +1,29 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import NavBar2 from "../components/NavBar2";
 import Footer from "../components/Footer";
 
-const RegisterPage = () => {
+const ProfilePage = () => {
   const router = useRouter();
-  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    loginName: "",
     department: "",
-    password: "",
-    confirmPassword: "",
-    profileImage: null,
     messageToRunners: "",
-    runningExperience: []
+    runningExperience: [],
+    profileImage: null,
+    currentPassword: "",
+    newPassword: "",
+    confirmNewPassword: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [showPasswordSection, setShowPasswordSection] = useState(false);
 
   const departments = [
     "Computer Science",
@@ -59,23 +61,38 @@ const RegisterPage = () => {
   ];
 
   useEffect(() => {
-    checkAuthStatus();
+    checkAuthAndLoadProfile();
   }, []);
 
-  const checkAuthStatus = async () => {
+  const checkAuthAndLoadProfile = async () => {
     try {
       const response = await fetch('/api/auth/check');
       const data = await response.json();
       
       if (response.ok && data.isLoggedIn) {
-        // ถ้า login อยู่แล้ว redirect ไปหน้า profile
-        router.push('/profile');
-        return;
+        setIsLoggedIn(true);
+        setUserInfo(data.user);
+        setFormData({
+          firstName: data.user.firstName || "",
+          lastName: data.user.lastName || "",
+          department: data.user.department || "",
+          messageToRunners: data.user.messageToRunners || "",
+          runningExperience: data.user.runningExperience || [],
+          profileImage: null,
+          currentPassword: "",
+          newPassword: "",
+          confirmNewPassword: ""
+        });
+      } else {
+        setIsLoggedIn(false);
+        router.push('/login');
       }
     } catch (error) {
       console.error('Auth check error:', error);
+      setIsLoggedIn(false);
+      router.push('/login');
     } finally {
-      setIsCheckingAuth(false);
+      setIsLoading(false);
     }
   };
 
@@ -104,7 +121,7 @@ const RegisterPage = () => {
       ...prev,
       [name]: files ? files[0] : value
     }));
-    // Clear error when user starts typing
+    
     if (error) setError("");
   };
 
@@ -115,7 +132,7 @@ const RegisterPage = () => {
         ? prev.runningExperience.filter(id => id !== experienceId)
         : [...prev.runningExperience, experienceId]
     }));
-    // Clear error when user makes selection
+    
     if (error) setError("");
   };
 
@@ -125,36 +142,47 @@ const RegisterPage = () => {
     setError("");
     setSuccess("");
 
-    // Validate passwords match
-    if (formData.password !== formData.confirmPassword) {
-      setError("รหัสผ่านไม่ตรงกัน");
-      setIsSubmitting(false);
-      return;
-    }
-
-    // Validate password length
-    if (formData.password.length < 6) {
-      setError("รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร");
-      setIsSubmitting(false);
-      return;
+    // Validate password fields if user wants to change password
+    if (showPasswordSection) {
+      if (!formData.currentPassword) {
+        setError("กรุณากรอกรหัสผ่านปัจจุบัน");
+        setIsSubmitting(false);
+        return;
+      }
+      
+      if (formData.newPassword && formData.newPassword.length < 6) {
+        setError("รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัวอักษร");
+        setIsSubmitting(false);
+        return;
+      }
+      
+      if (formData.newPassword !== formData.confirmNewPassword) {
+        setError("รหัสผ่านใหม่ไม่ตรงกัน");
+        setIsSubmitting(false);
+        return;
+      }
     }
 
     try {
       const formDataToSend = new FormData();
       formDataToSend.append('firstName', formData.firstName);
       formDataToSend.append('lastName', formData.lastName);
-      formDataToSend.append('loginName', formData.loginName);
       formDataToSend.append('department', formData.department);
-      formDataToSend.append('password', formData.password);
       formDataToSend.append('messageToRunners', formData.messageToRunners);
       formDataToSend.append('runningExperience', JSON.stringify(formData.runningExperience));
-
+      
+      if (showPasswordSection && formData.currentPassword) {
+        formDataToSend.append('currentPassword', formData.currentPassword);
+        if (formData.newPassword) {
+          formDataToSend.append('newPassword', formData.newPassword);
+        }
+      }
       
       if (formData.profileImage) {
         formDataToSend.append('profileImage', formData.profileImage);
       }
 
-      const response = await fetch('/api/auth/register', {
+      const response = await fetch('/api/profile/update', {
         method: 'POST',
         body: formDataToSend,
       });
@@ -163,37 +191,29 @@ const RegisterPage = () => {
 
       if (response.ok) {
         setSuccess(data.message);
-        // Reset form
-        setFormData({
-          firstName: "",
-          lastName: "",
-          loginName: "",
-          department: "",
-          password: "",
-          confirmPassword: "",
+        setFormData(prev => ({
+          ...prev,
           profileImage: null,
-          messageToRunners: "",
-          runningExperience: []
-        });
+          currentPassword: "",
+          newPassword: "",
+          confirmNewPassword: ""
+        }));
+        setShowPasswordSection(false);
         
-        // Redirect to login after 2 seconds
-        setTimeout(() => {
-          router.push('/login');
-        }, 2000);
+        // Reload user data
+        checkAuthAndLoadProfile();
       } else {
-        setError(data.error || 'เกิดข้อผิดพลาดในการสมัครสมาชิก');
+        setError(data.error || 'เกิดข้อผิดพลาดในการอัปเดตข้อมูล');
       }
     } catch (error) {
-      console.error('Registration error:', error);
+      console.error('Update error:', error);
       setError('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-
-
-  if (isCheckingAuth) {
+  if (isLoading) {
     return (
       <main className="min-h-screen bg-white text-gray-800">
         <NavBar2 />
@@ -202,6 +222,10 @@ const RegisterPage = () => {
         </div>
       </main>
     );
+  }
+
+  if (!isLoggedIn) {
+    return null; // Will redirect to login
   }
 
   return (
@@ -214,19 +238,40 @@ const RegisterPage = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">
-              สมัคร<span className="text-orange-400">สมาชิก</span>
+              แก้ไข<span className="text-orange-400">โปรไฟล์</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              เรามาวิ่งไปด้วยกันนะ
+              อัปเดตข้อมูลส่วนตัวและการตั้งค่าของคุณ
             </p>
           </div>
         </div>
       </section>
 
-      {/* Register Form */}
+      {/* Profile Form */}
       <section className="py-12 sm:py-16">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-lg p-10 shadow-xl border border-gray-200">
+            
+            {/* Current Profile Info */}
+            {userInfo && (
+              <div className="mb-8 p-6 bg-gray-50 rounded-lg">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">ข้อมูลปัจจุบัน</h3>
+                <div className="flex items-center space-x-4">
+                  {userInfo.profileImage && (
+                    <img
+                      src={userInfo.profileImage}
+                      alt="Profile"
+                      className="w-16 h-16 rounded-full object-cover"
+                    />
+                  )}
+                  <div>
+                    <p className="font-medium">{userInfo.firstName} {userInfo.lastName}</p>
+                    <p className="text-sm text-gray-600">{userInfo.department}</p>
+                    <p className="text-sm text-gray-600">@{userInfo.loginName}</p>
+                  </div>
+                </div>
+              </div>
+            )}
             
             {/* Error/Success Messages */}
             {error && (
@@ -238,7 +283,6 @@ const RegisterPage = () => {
             {success && (
               <div className="mb-6 p-4 bg-green-100 border border-green-300 rounded-lg text-green-700">
                 {success}
-                <div className="text-sm mt-2">กำลังเปลี่ยนเส้นทางไปหน้าเข้าสู่ระบบ...</div>
               </div>
             )}
 
@@ -247,7 +291,7 @@ const RegisterPage = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="firstName" className="block text-base font-medium text-gray-700 mb-3">
-                    Name *
+                    ชื่อ *
                   </label>
                   <input
                     type="text"
@@ -257,12 +301,12 @@ const RegisterPage = () => {
                     onChange={handleChange}
                     required
                     className="w-full px-5 py-4 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent text-gray-800 placeholder-gray-500 text-base"
-                    placeholder="Name"
+                    placeholder="ชื่อ"
                   />
                 </div>
                 <div>
                   <label htmlFor="lastName" className="block text-base font-medium text-gray-700 mb-3">
-                    Surname *
+                    นามสกุล *
                   </label>
                   <input
                     type="text"
@@ -272,28 +316,9 @@ const RegisterPage = () => {
                     onChange={handleChange}
                     required
                     className="w-full px-5 py-4 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent text-gray-800 placeholder-gray-500 text-base"
-                    placeholder="Surname"
+                    placeholder="นามสกุล"
                   />
                 </div>
-              </div>
-
-              {/* Login Name */}
-              <div>
-                <label htmlFor="loginName" className="block text-base font-medium text-gray-700 mb-3">
-                  Username เพื่อใช้เข้าสู่ระบบ *
-                </label>
-                <input
-                  type="text"
-                  id="loginName"
-                  name="loginName"
-                  value={formData.loginName}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-5 py-4 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent text-gray-800 placeholder-gray-500 text-base"
-                  placeholder="ชื่อผู้ใช้สำหรับเข้าสู่ระบบ (เฉพาะตัวอักษรและตัวเลข)"
-                  pattern="[a-zA-Z0-9]+"
-                  title="ใช้ได้เฉพาะตัวอักษรและตัวเลขเท่านั้น"
-                />
               </div>
 
               {/* Department */}
@@ -314,41 +339,6 @@ const RegisterPage = () => {
                     <option key={dept} value={dept}>{dept}</option>
                   ))}
                 </select>
-              </div>
-
-              {/* Password */}
-              <div>
-                <label htmlFor="password" className="block text-base font-medium text-gray-700 mb-3">
-                  รหัสผ่าน *
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  minLength="6"
-                  className="w-full px-5 py-4 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent text-gray-800 placeholder-gray-500 text-base"
-                  placeholder="รหัสผ่านอย่างน้อย 6 ตัวอักษร"
-                />
-              </div>
-
-              {/* Confirm Password */}
-              <div>
-                <label htmlFor="confirmPassword" className="block text-base font-medium text-gray-700 mb-3">
-                  ยืนยันรหัสผ่าน *
-                </label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-5 py-4 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent text-gray-800 placeholder-gray-500 text-base"
-                  placeholder="ยืนยันรหัสผ่าน"
-                />
               </div>
 
               {/* Running Experience */}
@@ -374,7 +364,7 @@ const RegisterPage = () => {
               {/* Profile Image Upload */}
               <div>
                 <label htmlFor="profileImage" className="block text-base font-medium text-gray-700 mb-3">
-                  รูปโปรไฟล์
+                  รูปโปรไฟล์ใหม่
                 </label>
                 <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-orange-400 transition-colors">
                   <div className="space-y-1 text-center">
@@ -397,7 +387,7 @@ const RegisterPage = () => {
                         htmlFor="profileImage"
                         className="relative cursor-pointer bg-white rounded-md font-medium text-orange-600 hover:text-orange-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-orange-500"
                       >
-                        <span>อัปโหลดรูปภาพ</span>
+                        <span>อัปโหลดรูปภาพใหม่</span>
                         <input
                           id="profileImage"
                           name="profileImage"
@@ -435,25 +425,84 @@ const RegisterPage = () => {
                 />
               </div>
 
+              {/* Password Section Toggle */}
+              <div className="border-t pt-8">
+                <button
+                  type="button"
+                  onClick={() => setShowPasswordSection(!showPasswordSection)}
+                  className="flex items-center justify-between w-full p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  <span className="text-base font-medium text-gray-700">เปลี่ยนรหัสผ่าน</span>
+                  <svg
+                    className={`w-5 h-5 transform transition-transform ${showPasswordSection ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                
+                {showPasswordSection && (
+                  <div className="mt-4 space-y-6">
+                    <div>
+                      <label htmlFor="currentPassword" className="block text-base font-medium text-gray-700 mb-3">
+                        รหัสผ่านปัจจุบัน *
+                      </label>
+                      <input
+                        type="password"
+                        id="currentPassword"
+                        name="currentPassword"
+                        value={formData.currentPassword}
+                        onChange={handleChange}
+                        className="w-full px-5 py-4 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent text-gray-800 placeholder-gray-500 text-base"
+                        placeholder="กรอกรหัสผ่านปัจจุบัน"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="newPassword" className="block text-base font-medium text-gray-700 mb-3">
+                        รหัสผ่านใหม่
+                      </label>
+                      <input
+                        type="password"
+                        id="newPassword"
+                        name="newPassword"
+                        value={formData.newPassword}
+                        onChange={handleChange}
+                        minLength="6"
+                        className="w-full px-5 py-4 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent text-gray-800 placeholder-gray-500 text-base"
+                        placeholder="กรอกรหัสผ่านใหม่ (อย่างน้อย 6 ตัวอักษร)"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="confirmNewPassword" className="block text-base font-medium text-gray-700 mb-3">
+                        ยืนยันรหัสผ่านใหม่
+                      </label>
+                      <input
+                        type="password"
+                        id="confirmNewPassword"
+                        name="confirmNewPassword"
+                        value={formData.confirmNewPassword}
+                        onChange={handleChange}
+                        className="w-full px-5 py-4 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent text-gray-800 placeholder-gray-500 text-base"
+                        placeholder="ยืนยันรหัสผ่านใหม่"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+
               {/* Submit Button */}
               <button
                 type="submit"
                 disabled={isSubmitting}
                 className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-gray-600 text-white px-8 py-4 rounded-lg font-medium text-lg transition duration-300 transform hover:scale-105 disabled:transform-none"
               >
-                {isSubmitting ? "กำลังสมัครสมาชิก..." : "สมัครสมาชิก"}
+                {isSubmitting ? "กำลังอัปเดต..." : "อัปเดตข้อมูล"}
               </button>
             </form>
-
-            {/* Login Link */}
-            <div className="mt-6 text-center">
-              <p className="text-gray-600">
-                มีบัญชีผู้ใช้แล้ว?{" "}
-                <Link href="/login" className="text-yellow-400 hover:text-yellow-300 font-medium">
-                  เข้าสู่ระบบ
-                </Link>
-              </p>
-            </div>
           </div>
         </div>
       </section>
@@ -463,4 +512,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default ProfilePage;

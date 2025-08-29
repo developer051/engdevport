@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import NavBar2 from "../components/NavBar2";
@@ -7,12 +7,34 @@ import Footer from "../components/Footer";
 
 const LoginPage = () => {
   const router = useRouter();
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [formData, setFormData] = useState({
     loginName: "",
     password: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
+
+  const checkAuthStatus = async () => {
+    try {
+      const response = await fetch('/api/auth/check');
+      const data = await response.json();
+      
+      if (response.ok && data.isLoggedIn) {
+        // ถ้า login อยู่แล้ว redirect ไปหน้า profile
+        router.push('/profile');
+        return;
+      }
+    } catch (error) {
+      console.error('Auth check error:', error);
+    } finally {
+      setIsCheckingAuth(false);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,6 +79,17 @@ const LoginPage = () => {
       setIsSubmitting(false);
     }
   };
+
+  if (isCheckingAuth) {
+    return (
+      <main className="min-h-screen bg-white text-gray-800">
+        <NavBar2 />
+        <div className="flex justify-center items-center min-h-screen">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-orange-400"></div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-white text-gray-800">

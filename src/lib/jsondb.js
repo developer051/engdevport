@@ -75,6 +75,7 @@ export const createUser = async (userData) => {
     password: hashedPassword,
     profileImage: userData.profileImage || null,
     messageToRunners: userData.messageToRunners || '',
+    runningExperience: userData.runningExperience || [],
     score: 0,
     isActive: true,
     createdAt: new Date().toISOString(),
@@ -153,8 +154,19 @@ export const updateUser = (userId, userData) => {
     loginName: userData.loginName.toLowerCase(),
     department: userData.department,
     messageToRunners: userData.messageToRunners || '',
+    runningExperience: userData.runningExperience || [],
     updatedAt: new Date().toISOString()
   };
+  
+  // Update password if provided
+  if (userData.password) {
+    users[userIndex].password = userData.password;
+  }
+  
+  // Update profile image if provided
+  if (userData.profileImage) {
+    users[userIndex].profileImage = userData.profileImage;
+  }
   
   if (writeUsers(users)) {
     const { password, ...userWithoutPassword } = users[userIndex];

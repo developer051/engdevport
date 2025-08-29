@@ -13,7 +13,17 @@ export async function POST(request) {
     const department = formData.get('department');
     const password = formData.get('password');
     const messageToRunners = formData.get('messageToRunners') || '';
+    const runningExperience = formData.get('runningExperience') || '[]';
     const profileImage = formData.get('profileImage');
+    
+    // Parse running experience
+    let parsedRunningExperience = [];
+    try {
+      parsedRunningExperience = JSON.parse(runningExperience);
+    } catch (error) {
+      console.error('Error parsing running experience:', error);
+      parsedRunningExperience = [];
+    }
     
     // Validate required fields
     if (!firstName || !lastName || !loginName || !department || !password) {
@@ -79,7 +89,8 @@ export async function POST(request) {
       department,
       password,
       profileImage: profileImagePath,
-      messageToRunners
+      messageToRunners,
+      runningExperience: parsedRunningExperience
     });
     
     return NextResponse.json(

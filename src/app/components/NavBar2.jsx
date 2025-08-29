@@ -100,13 +100,19 @@ const NavBar2 = () => {
                    <span className="text-gray-700 font-medium text-lg">
                      สวัสดี, {user.firstName}
                    </span>
-                 </div>
-                                    <button
-                     onClick={handleLogout}
-                     className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-lg font-medium transition-all duration-300 ease-in-out hover:shadow-lg transform hover:-translate-y-0.5"
-                   >
-                     ออกจากระบบ
-                   </button>
+                                 </div>
+                <Link
+                  href="/profile"
+                  className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-md text-lg font-medium transition-all duration-300 ease-in-out hover:shadow-lg transform hover:-translate-y-0.5"
+                >
+                  แก้ไขโปรไฟล์
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-lg font-medium transition-all duration-300 ease-in-out hover:shadow-lg transform hover:-translate-y-0.5"
+                >
+                  ออกจากระบบ
+                </button>
                </div>
              ) : (
               <div className="flex items-center space-x-2">
@@ -202,13 +208,21 @@ const NavBar2 = () => {
                    <div className="text-gray-700 text-lg font-medium">
                      สวัสดี, {user.firstName}
                    </div>
-                 </div>
-                                    <button
+                                  </div>
+                 <div className="space-y-2">
+                   <Link
+                     href="/profile"
+                     className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-md text-lg font-medium w-full transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5 block text-center"
+                   >
+                     แก้ไขโปรไฟล์
+                   </Link>
+                   <button
                      onClick={handleLogout}
                      className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-lg font-medium w-full transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5"
                    >
                      ออกจากระบบ
                    </button>
+                 </div>
                </div>
              ) : (
               <div className="px-3 py-2 space-y-2">
