@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
-import { findUserByLoginName, validatePassword } from '@/lib/jsondb';
+import { findUserByLoginName, validatePassword } from '@/lib/dbFallback';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
@@ -17,7 +17,7 @@ export async function POST(request) {
     }
     
     // Find user by loginName
-    const user = findUserByLoginName(loginName);
+    const user = await findUserByLoginName(loginName);
     if (!user || !user.isActive) {
       return NextResponse.json(
         { error: 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง' },
@@ -37,7 +37,7 @@ export async function POST(request) {
     // Generate JWT token
     const token = jwt.sign(
       { 
-        userId: user.id,
+        userId: user.originalId || user.id,
         loginName: user.loginName
       },
       JWT_SECRET,
@@ -46,13 +46,14 @@ export async function POST(request) {
     
     // User response without password
     const userResponse = {
-      id: user.id,
+      id: user.originalId || user.id,
       firstName: user.firstName,
       lastName: user.lastName,
       loginName: user.loginName,
       department: user.department,
       profileImage: user.profileImage,
       messageToRunners: user.messageToRunners,
+      runningExperience: user.runningExperience,
       score: user.score
     };
     

@@ -88,5 +88,20 @@
     "imagePath": "/uploads/running-results/1756276225423zao81sa8o_1756371741785.png",
     "score": 50,
     "submittedAt": "2025-08-28T09:02:21.791Z"
+  },
+  {
+    "id": "1756450420564",
+    "userId": "1756449805934grubhcyah",
+    "userName": "mongo mongo",
+    "hours": 5,
+    "minutes": 0,
+    "seconds": 0,
+    "totalSeconds": 18000,
+    "distance": 42,
+    "distanceUnit": "km",
+    "distanceInKm": 42,
+    "imagePath": "/uploads/running-results/1756449805934grubhcyah_1756450420540.png",
+    "score": 420,
+    "submittedAt": "2025-08-29T06:53:40.564Z"
   }
 ]

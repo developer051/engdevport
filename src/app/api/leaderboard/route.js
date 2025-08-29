@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
-import { getAllUsers } from '@/lib/jsondb';
+import { getAllUsers } from '@/lib/dbFallback';
 import { existsSync } from 'fs';
 import path from 'path';
 
 export async function GET() {
   try {
     // ดึงข้อมูลผู้ใช้ทั้งหมด
-    const users = getAllUsers('score', 'desc');
+    const users = await getAllUsers('score', 'desc');
     
     // ดึงข้อมูลผลการวิ่ง
     const resultsPath = path.join(process.cwd(), 'data', 'running-results.json');

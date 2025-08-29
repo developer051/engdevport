@@ -4,7 +4,7 @@ import { existsSync } from 'fs';
 import path from 'path';
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
-import { findUserById, updateUserScore } from '@/lib/jsondb';
+import { findUserById, updateUserScore } from '@/lib/dbFallback';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
@@ -33,7 +33,7 @@ export async function POST(request) {
     }
 
     // หาข้อมูลผู้ใช้
-    const user = findUserById(decoded.userId);
+    const user = await findUserById(decoded.userId);
     if (!user) {
       return NextResponse.json(
         { error: 'ไม่พบข้อมูลผู้ใช้' },
@@ -96,7 +96,7 @@ export async function POST(request) {
     // สร้างชื่อไฟล์
     const timestamp = Date.now();
     const fileExtension = path.extname(imageFile.name);
-    const fileName = `${user.id}_${timestamp}${fileExtension}`;
+    const fileName = `${user.originalId || user.id}_${timestamp}${fileExtension}`;
     const filePath = path.join(uploadDir, fileName);
 
     // บันทึกไฟล์
@@ -121,12 +121,12 @@ export async function POST(request) {
     const newScore = baseScore + timeBonus;
 
     // อัปเดตคะแนนผู้ใช้
-    const updatedUser = updateUserScore(user.id, newScore);
+    const updatedUser = await updateUserScore(user.originalId || user.id, newScore);
 
     // บันทึกข้อมูลผลการวิ่ง
     const runningResult = {
       id: Date.now().toString(),
-      userId: user.id,
+      userId: user.originalId || user.id,
       userName: `${user.firstName} ${user.lastName}`,
       hours,
       minutes,

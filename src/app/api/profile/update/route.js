@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { findUserById, updateUser, validatePassword } from '@/lib/jsondb';
+import { findUserById, updateUser, validatePassword } from '@/lib/dbFallback';
 import { writeFile, mkdir } from 'fs/promises';
 import { cookies } from 'next/headers';
 import path from 'path';

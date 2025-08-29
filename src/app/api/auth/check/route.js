@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { findUserById } from '@/lib/jsondb';
+import { findUserById } from '@/lib/dbFallback';
 
 export async function GET() {
   try {
@@ -34,7 +34,7 @@ export async function GET() {
       }
       
       // ดึงข้อมูล user จากฐานข้อมูล
-      const user = findUserById(decoded.userId);
+      const user = await findUserById(decoded.userId);
       if (!user) {
         return NextResponse.json(
           { 
@@ -50,7 +50,7 @@ export async function GET() {
         success: true,
         message: 'ผู้ใช้เข้าสู่ระบบแล้ว',
         user: {
-          id: user.id,
+          id: user.originalId || user.id,
           firstName: user.firstName,
           lastName: user.lastName,
           loginName: user.loginName,
