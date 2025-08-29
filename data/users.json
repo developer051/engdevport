@@ -78,5 +78,19 @@
     "isActive": true,
     "createdAt": "2025-08-28T09:09:37.715Z",
     "updatedAt": "2025-08-28T09:09:37.715Z"
+  },
+  {
+    "id": "1756433256425q5jomtvoj",
+    "firstName": "rabbitrunfast",
+    "lastName": "rn",
+    "loginName": "rabbitrunfast",
+    "department": "HR",
+    "password": "$2b$12$kyp4SkIhhUF9BVRHXax4Eu2mNxuj7I.LvqrLw99Z.HYxUTu7co3Uq",
+    "profileImage": "/uploads/profiles/rabbitrunfast_1756433256140.png",
+    "messageToRunners": "มาแข่งกัน",
+    "score": 0,
+    "isActive": true,
+    "createdAt": "2025-08-29T02:07:36.426Z",
+    "updatedAt": "2025-08-29T02:07:36.426Z"
   }
 ]

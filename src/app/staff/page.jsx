@@ -30,6 +30,8 @@ const StaffPage = () => {
     }
   };
 
+
+
   return (
     <main className="min-h-screen bg-white text-gray-800">
       <NavBar2 />
@@ -77,11 +79,11 @@ const StaffPage = () => {
                 users.map((user) => (
                   <div key={user.id} className="bg-white rounded-lg overflow-hidden shadow-xl border border-gray-200">
                     {/* Member Image */}
-                    <div className="aspect-square overflow-hidden">
+                    <div className="aspect-square overflow-hidden p-4">
                       <img
                         src={user.profileImage || "/supachai.jpg"}
                         alt={`${user.firstName} ${user.lastName}`}
-                        className="w-full h-full object-cover hover:scale-105 transition-all duration-300"
+                        className="w-full h-full object-cover rounded-lg hover:scale-105 transition-all duration-300"
                       />
                     </div>
                     
@@ -93,9 +95,11 @@ const StaffPage = () => {
                       <p className="text-sm font-medium mb-4 text-orange-400">
                         {user.department}
                       </p>
-                      <p className="text-sm text-gray-600 leading-relaxed mb-6">
+                      <p className="text-sm text-gray-600 leading-relaxed mb-4">
                         {user.messageToRunners || "ไม่มีข้อความ"}
                       </p>
+                      
+
                       
                       {/* Social Icons */}
                       <div className="flex space-x-4">

@@ -46,6 +46,8 @@ const RegisterPage = () => {
     "Other"
   ];
 
+
+
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     
@@ -103,6 +105,7 @@ const RegisterPage = () => {
       formDataToSend.append('department', formData.department);
       formDataToSend.append('password', formData.password);
       formDataToSend.append('messageToRunners', formData.messageToRunners);
+
       
       if (formData.profileImage) {
         formDataToSend.append('profileImage', formData.profileImage);
@@ -126,7 +129,8 @@ const RegisterPage = () => {
           password: "",
           confirmPassword: "",
           profileImage: null,
-          messageToRunners: ""
+          messageToRunners: "",
+
         });
         
         // Redirect to login after 2 seconds
@@ -143,6 +147,8 @@ const RegisterPage = () => {
       setIsSubmitting(false);
     }
   };
+
+
 
   return (
     <main className="min-h-screen bg-white text-gray-800">
@@ -290,6 +296,8 @@ const RegisterPage = () => {
                   placeholder="ยืนยันรหัสผ่าน"
                 />
               </div>
+
+
 
               {/* Profile Image Upload */}
               <div>
