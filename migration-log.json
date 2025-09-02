@@ -1,7 +1,12 @@
 {
   "total": 7,
   "successful": 0,
-  "failed": 0,
-  "skipped": 7,
-  "errors": []
+  "failed": 1,
+  "skipped": 6,
+  "errors": [
+    {
+      "user": "supachai",
+      "error": "E11000 duplicate key error collection: engdev-port.users index: loginName_1 dup key: { loginName: \"supachai\" }"
+    }
+  ]
 }

@@ -1,19 +1,100 @@
 const fs = require('fs');
 const path = require('path');
+const mongoose = require('mongoose');
+
+// MongoDB connection
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/engdev-port';
+
+// User Schema
+const userSchema = new mongoose.Schema({
+  originalId: {
+    type: String,
+    unique: true,
+    required: true,
+  },
+  firstName: {
+    type: String,
+    required: true,
+    trim: true,
+    maxlength: 50,
+  },
+  lastName: {
+    type: String,
+    required: true,
+    trim: true,
+    maxlength: 50,
+  },
+  loginName: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+    trim: true,
+  },
+  department: {
+    type: String,
+    required: true,
+    enum: [
+      "Computer Science",
+      "Data Science",
+      "Artificial Intelligence",
+      "Software Engineering",
+      "Information Technology",
+      "Cybersecurity",
+      "Agency",
+      "Telemarketing",
+      "Marketing",
+      "Sales",
+      "Customer Service",
+      "HR",
+      "Finance",
+      "Legal",
+      "Risk Management",
+      "Business Development",
+      "Project Management",
+      "Administration",
+      "Other",
+    ],
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  profileImage: {
+    type: String,
+    default: null,
+  },
+  messageToRunners: {
+    type: String,
+    default: "",
+  },
+  runningExperience: {
+    type: [String],
+    default: [],
+  },
+  score: {
+    type: Number,
+    default: 0,
+  },
+  isActive: {
+    type: Boolean,
+    default: true,
+  },
+}, {
+  timestamps: true,
+});
+
+const User = mongoose.model('User', userSchema);
+
+const MIGRATION_LOG_FILE = path.join(process.cwd(), 'migration-log.json');
 
 async function migrateUsersToMongo() {
   try {
     console.log('🔄 เริ่มการโอนย้ายข้อมูลจาก JSON ไป MongoDB...');
     
-    // Import CommonJS modules
-    const connectDB = require('../src/lib/mongodb.cjs');
-    const User = require('../src/models/User.cjs');
-    
-    const MIGRATION_LOG_FILE = path.join(process.cwd(), 'migration-log.json');
-    
     // เชื่อมต่อ MongoDB
     try {
-      await connectDB();
+      await mongoose.connect(MONGODB_URI);
       console.log('✅ เชื่อมต่อ MongoDB สำเร็จ');
     } catch (dbError) {
       console.error('❌ ไม่สามารถเชื่อมต่อ MongoDB ได้:', dbError.message);
@@ -46,11 +127,10 @@ async function migrateUsersToMongo() {
     // โอนย้ายข้อมูลทีละคน
     for (const userData of usersData) {
       try {
-        // ตรวจสอบว่ามีข้อมูลนี้ใน MongoDB แล้วหรือไม่ (ตรวจสอบทั้ง originalId และ loginName)
-        const existingUserById = await User.findOne({ originalId: userData.id });
-        const existingUserByLogin = await User.findOne({ loginName: userData.loginName });
+        // ตรวจสอบว่ามีข้อมูลนี้ใน MongoDB แล้วหรือไม่
+        const existingUser = await User.findOne({ originalId: userData.id });
         
-        if (existingUserById || existingUserByLogin) {
+        if (existingUser) {
           console.log(`⚠️  ผู้ใช้ ${userData.loginName} มีอยู่ใน MongoDB แล้ว ข้ามไป`);
           migrationResults.skipped++;
           continue;
@@ -107,6 +187,7 @@ async function migrateUsersToMongo() {
     console.log(`📄 ดูรายละเอียดเพิ่มเติมได้ที่: ${MIGRATION_LOG_FILE}`);
     
     // ปิดการเชื่อมต่อ MongoDB
+    await mongoose.disconnect();
     process.exit(0);
     
   } catch (error) {

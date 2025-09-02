@@ -61,7 +61,7 @@ const StaffPage = () => {
             </h1>
             
             <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              Meet our talented team of Rabbit Members who are passionate about delivering exceptional results
+            Welcome the Human Network
             </p>
           </div>
         </div>
