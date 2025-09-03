@@ -113,7 +113,7 @@ const GalleryPage = () => {
                 <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
                   หนึ่งภาพสร้างแรงบันดาลใจ
                 </h2>
-                <p className="text-gray-600">จัดการการแสดงผลภาพ</p>
+                <p className="text-gray-600">รอเพื่อนๆ ส่งภาพสวยๆ มาอวดกันนะ</p>
               </div>
 
               {/* Gallery Controls */}

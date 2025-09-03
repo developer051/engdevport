@@ -209,12 +209,12 @@ const Banner = () => {
 
       {/* Content */}
       <motion.div
-        className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16"
+        className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-[calc(100vh-7rem)]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-[calc(100vh-5rem)]">
           {/* Left: Enhanced Content */}
           <div className="order-2 lg:order-1 text-center lg:text-left">
             {/* Enhanced Badge */}
