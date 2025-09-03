@@ -43,6 +43,7 @@ const UserSchema = new mongoose.Schema(
         "Marketing",
         "Sales",
         "Customer Service",
+        "Underwriting and Claims",
         "HR",
         "Finance",
         "Legal",
