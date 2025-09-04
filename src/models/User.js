@@ -21,6 +21,12 @@ const UserSchema = new mongoose.Schema(
       trim: true,
       maxlength: [50, "นามสกุลต้องไม่เกิน 50 ตัวอักษร"],
     },
+    nickname: {
+      type: String,
+      default: "",
+      trim: true,
+      maxlength: [30, "ชื่อเล่นต้องไม่เกิน 30 ตัวอักษร"],
+    },
     loginName: {
       type: String,
       required: [true, "กรุณากรอกชื่อผู้ใช้"],

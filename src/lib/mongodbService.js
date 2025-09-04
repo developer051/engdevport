@@ -37,6 +37,7 @@ export const createUser = async (userData) => {
     originalId: Date.now().toString() + Math.random().toString(36).substr(2, 9),
     firstName: userData.firstName,
     lastName: userData.lastName,
+    nickname: userData.nickname || '',
     loginName: userData.loginName.toLowerCase(),
     department: userData.department,
     password: userData.password, // จะถูก hash โดย pre-save hook (ถ้ายังไม่ได้ hash)
@@ -66,6 +67,7 @@ export const updateUser = async (userId, userData) => {
   // Update fields
   if (userData.firstName) user.firstName = userData.firstName;
   if (userData.lastName) user.lastName = userData.lastName;
+  if (userData.nickname !== undefined) user.nickname = userData.nickname;
   if (userData.loginName) user.loginName = userData.loginName.toLowerCase();
   if (userData.department) user.department = userData.department;
   if (userData.messageToRunners !== undefined) user.messageToRunners = userData.messageToRunners;
@@ -107,6 +109,7 @@ export const getAllUsers = async (sortBy = 'score', sortOrder = 'desc') => {
     id: user.originalId,
     firstName: user.firstName,
     lastName: user.lastName,
+    nickname: user.nickname,
     loginName: user.loginName,
     department: user.department,
     profileImage: user.profileImage,

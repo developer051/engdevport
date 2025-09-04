@@ -10,7 +10,8 @@ export default function RunningResultPage() {
     minutes: '',
     seconds: '',
     distance: '',
-    distanceUnit: 'km'
+    distanceUnit: 'km',
+    runningDate: ''
   });
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -80,6 +81,7 @@ export default function RunningResultPage() {
       submitData.append('seconds', formData.seconds || '0');
       submitData.append('distance', formData.distance);
       submitData.append('distanceUnit', formData.distanceUnit);
+      submitData.append('runningDate', formData.runningDate || new Date().toISOString().split('T')[0]);
       submitData.append('image', imageFile);
 
       const response = await fetch('/api/running-result', {
@@ -101,7 +103,8 @@ export default function RunningResultPage() {
         minutes: '',
         seconds: '',
         distance: '',
-        distanceUnit: 'km'
+        distanceUnit: 'km',
+        runningDate: ''
       });
       setImageFile(null);
       setImagePreview(null);
@@ -158,6 +161,28 @@ export default function RunningResultPage() {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Running Date Section */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">วันที่ทำการวิ่ง</h3>
+                <div>
+                  <label htmlFor="runningDate" className="block text-sm font-medium text-gray-700 mb-2">
+                    วันที่วิ่ง (ถ้าไม่เลือกจะใช้วันที่ส่งผล)
+                  </label>
+                  <input
+                    type="date"
+                    id="runningDate"
+                    name="runningDate"
+                    value={formData.runningDate}
+                    onChange={handleChange}
+                    max={new Date().toISOString().split('T')[0]}
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent text-gray-800"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    หากไม่เลือกวันที่ จะใช้วันที่ส่งผลการวิ่งเป็นวันที่ทำการวิ่ง
+                  </p>
+                </div>
+              </div>
+
               {/* Time Section */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">เวลาที่ใช้วิ่ง</h3>
@@ -321,24 +346,40 @@ export default function RunningResultPage() {
             </form>
 
             {/* Additional Links */}
-            <div className="mt-6 text-center">
-              <Link href="/leaderboard" className="text-sm text-gray-500 hover:text-orange-500">
-                ดูอันดับทั้งหมด
-              </Link>
+            <div className="mt-6 space-y-3">
+              <div className="text-center">
+                <Link href="/leaderboard" className="text-sm text-gray-500 hover:text-orange-500">
+                  ดูอันดับทั้งหมด
+                </Link>
+              </div>
             </div>
             </div>
 
             {/* Image Section */}
-            <div className="flex justify-center items-center">
+            <div className="flex flex-col justify-center items-center space-y-6">
               <img 
                 src="/sendnobg.png" 
                 alt="Running Illustration" 
                 className="max-w-full h-auto max-h-200 object-contain opacity-50"
               />
+              
+              {/* Edit Button next to Rabbit */}
+              <Link 
+                href="/running-result/edit" 
+                className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-lg transition duration-300 transform hover:scale-105 shadow-md hover:shadow-lg"
+              >
+                <div className="flex items-center space-x-2">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                  <span>แก้ไขผลการวิ่ง</span>
+                </div>
+              </Link>
             </div>
           </div>
         </div>
       </section>
+
     </main>
   );
 }

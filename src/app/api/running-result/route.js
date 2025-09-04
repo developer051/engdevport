@@ -8,6 +8,61 @@ import { findUserById, updateUserScore } from '@/lib/dbFallback';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
+// GET method - ดึงข้อมูล running results ของ user
+export async function GET() {
+  try {
+    // ตรวจสอบ authentication
+    const cookieStore = await cookies();
+    const token = cookieStore.get('token');
+
+    if (!token) {
+      return NextResponse.json(
+        { error: 'กรุณาเข้าสู่ระบบก่อนดูผลการวิ่ง' },
+        { status: 401 }
+      );
+    }
+
+    // ตรวจสอบ JWT token
+    let decoded;
+    try {
+      decoded = jwt.verify(token.value, JWT_SECRET);
+    } catch (error) {
+      return NextResponse.json(
+        { error: 'Token ไม่ถูกต้อง กรุณาเข้าสู่ระบบใหม่' },
+        { status: 401 }
+      );
+    }
+
+    // อ่านข้อมูล running results
+    const resultsPath = path.join(process.cwd(), 'data', 'running-results.json');
+    let results = [];
+    
+    try {
+      const fs = await import('fs/promises');
+      if (existsSync(resultsPath)) {
+        const data = await fs.readFile(resultsPath, 'utf8');
+        results = JSON.parse(data);
+      }
+    } catch (error) {
+      console.log('ไม่พบไฟล์ running-results.json');
+    }
+
+    // กรองเฉพาะผลการวิ่งของ user นี้
+    const userResults = results.filter(result => result.userId === decoded.userId);
+
+    return NextResponse.json({
+      results: userResults
+    });
+
+  } catch (error) {
+    console.error('Get running results error:', error);
+    return NextResponse.json(
+      { error: 'เกิดข้อผิดพลาดในการดึงข้อมูลผลการวิ่ง' },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(request) {
   try {
     // ตรวจสอบ authentication
@@ -48,6 +103,7 @@ export async function POST(request) {
     const seconds = parseInt(formData.get('seconds')) || 0;
     const distance = parseFloat(formData.get('distance'));
     const distanceUnit = formData.get('distanceUnit');
+    const runningDate = formData.get('runningDate');
     const imageFile = formData.get('image');
 
     // ตรวจสอบข้อมูล
@@ -123,6 +179,9 @@ export async function POST(request) {
     // อัปเดตคะแนนผู้ใช้
     const updatedUser = await updateUserScore(user.originalId || user.id, newScore);
 
+    // กำหนดวันที่ส่งผล
+    const submittedAt = runningDate ? new Date(runningDate).toISOString() : new Date().toISOString();
+
     // บันทึกข้อมูลผลการวิ่ง
     const runningResult = {
       id: Date.now().toString(),
@@ -137,7 +196,8 @@ export async function POST(request) {
       distanceInKm,
       imagePath: `/uploads/running-results/${fileName}`,
       score: newScore,
-      submittedAt: new Date().toISOString()
+      submittedAt: submittedAt,
+      runningDate: runningDate || new Date().toISOString().split('T')[0]
     };
 
     // บันทึกข้อมูลผลการวิ่ง (ในที่นี้จะใช้ JSON file เช่นเดียวกับ users)

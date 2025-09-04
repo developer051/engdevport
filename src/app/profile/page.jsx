@@ -12,6 +12,7 @@ const ProfilePage = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
+    nickname: "",
     department: "",
     messageToRunners: "",
     runningExperience: [],
@@ -24,6 +25,7 @@ const ProfilePage = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [showPasswordSection, setShowPasswordSection] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const departments = [
     "Actuarial",
@@ -92,6 +94,7 @@ const ProfilePage = () => {
         setFormData({
           firstName: data.user.firstName || "",
           lastName: data.user.lastName || "",
+          nickname: data.user.nickname || "",
           department: data.user.department || "",
           messageToRunners: data.user.messageToRunners || "",
           runningExperience: data.user.runningExperience || [],
@@ -153,6 +156,12 @@ const ProfilePage = () => {
     if (error) setError("");
   };
 
+  const handleCloseSuccessModal = () => {
+    setShowSuccessModal(false);
+    // Redirect to staff page
+    router.push('/staff');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -184,6 +193,7 @@ const ProfilePage = () => {
       const formDataToSend = new FormData();
       formDataToSend.append('firstName', formData.firstName);
       formDataToSend.append('lastName', formData.lastName);
+      formDataToSend.append('nickname', formData.nickname);
       formDataToSend.append('department', formData.department);
       formDataToSend.append('messageToRunners', formData.messageToRunners);
       formDataToSend.append('runningExperience', JSON.stringify(formData.runningExperience));
@@ -216,6 +226,9 @@ const ProfilePage = () => {
           confirmNewPassword: ""
         }));
         setShowPasswordSection(false);
+        
+        // Show success modal
+        setShowSuccessModal(true);
         
         // Reload user data
         checkAuthAndLoadProfile();
@@ -336,6 +349,22 @@ const ProfilePage = () => {
                     placeholder="นามสกุล"
                   />
                 </div>
+              </div>
+
+              {/* Nickname */}
+              <div>
+                <label htmlFor="nickname" className="block text-base font-medium text-gray-700 mb-3">
+                  ชื่อเล่น
+                </label>
+                <input
+                  type="text"
+                  id="nickname"
+                  name="nickname"
+                  value={formData.nickname}
+                  onChange={handleChange}
+                  className="w-full px-5 py-4 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent text-gray-800 placeholder-gray-500 text-base"
+                  placeholder="ชื่อเล่นของคุณ (ไม่บังคับ)"
+                />
               </div>
 
               {/* Department */}
@@ -523,6 +552,48 @@ const ProfilePage = () => {
           </div>
         </div>
       </section>
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 max-w-md mx-4 shadow-xl">
+            <div className="text-center">
+              {/* Success Icon */}
+              <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
+                <svg
+                  className="h-8 w-8 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </div>
+              
+              {/* Success Message */}
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                อัปเดตข้อมูลสำเร็จ!
+              </h3>
+              <p className="text-sm text-gray-600 mb-6">
+                ข้อมูลโปรไฟล์ของคุณได้รับการอัปเดตเรียบร้อยแล้ว
+              </p>
+              
+              {/* Close Button */}
+              <button
+                onClick={handleCloseSuccessModal}
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-medium transition duration-300 transform hover:scale-105"
+              >
+                ไปดูหน้า Staff
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </main>

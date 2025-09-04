@@ -158,20 +158,6 @@ export async function GET() {
           description: "A stunning view of a Mediterranean coastal village with colorful houses and crystal clear waters.",
         },
         {
-          id: 2,
-          src: "/bgb.jpg",
-          alt: "Mountain Landscape",
-          title: "Mountain Landscape",
-          description: "Majestic mountain ranges with dramatic lighting and natural beauty.",
-        },
-        {
-          id: 3,
-          src: "/engdevopb.png",
-          alt: "EngDev Portfolio",
-          title: "Portfolio Design",
-          description: "Modern web design portfolio showcasing creative digital solutions.",
-        },
-        {
           id: 4,
           src: "/supachai.jpg",
           alt: "Professional Portrait",

@@ -11,6 +11,7 @@ const RegisterPage = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
+    nickname: "",
     loginName: "",
     department: "",
     password: "",
@@ -158,6 +159,7 @@ const RegisterPage = () => {
       const formDataToSend = new FormData();
       formDataToSend.append('firstName', formData.firstName);
       formDataToSend.append('lastName', formData.lastName);
+      formDataToSend.append('nickname', formData.nickname);
       formDataToSend.append('loginName', formData.loginName);
       formDataToSend.append('department', formData.department);
       formDataToSend.append('password', formData.password);
@@ -184,6 +186,7 @@ const RegisterPage = () => {
         setFormData({
           firstName: "",
           lastName: "",
+          nickname: "",
           loginName: "",
           department: "",
           password: "",
@@ -283,6 +286,22 @@ const RegisterPage = () => {
                     placeholder="Surname"
                   />
                 </div>
+              </div>
+
+              {/* Nickname */}
+              <div>
+                <label htmlFor="nickname" className="block text-base font-medium text-gray-700 mb-3">
+                  ชื่อเล่น
+                </label>
+                <input
+                  type="text"
+                  id="nickname"
+                  name="nickname"
+                  value={formData.nickname}
+                  onChange={handleChange}
+                  className="w-full px-5 py-4 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent text-gray-800 placeholder-gray-500 text-base"
+                  placeholder="ชื่อเล่นของคุณ (ไม่บังคับ)"
+                />
               </div>
 
               {/* Login Name */}

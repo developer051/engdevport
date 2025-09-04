@@ -11,6 +11,7 @@ export async function POST(request) {
     
     const firstName = formData.get('firstName');
     const lastName = formData.get('lastName');
+    const nickname = formData.get('nickname') || '';
     const department = formData.get('department');
     const messageToRunners = formData.get('messageToRunners') || '';
     const runningExperience = formData.get('runningExperience') || '[]';
@@ -139,6 +140,7 @@ export async function POST(request) {
     const updateData = {
       firstName,
       lastName,
+      nickname,
       loginName: user.loginName, // Keep existing loginName
       department,
       messageToRunners,

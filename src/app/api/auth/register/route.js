@@ -9,6 +9,7 @@ export async function POST(request) {
     
     const firstName = formData.get('firstName');
     const lastName = formData.get('lastName');
+    const nickname = formData.get('nickname') || '';
     const loginName = formData.get('loginName');
     const department = formData.get('department');
     const password = formData.get('password');
@@ -85,6 +86,7 @@ export async function POST(request) {
     const user = await createUser({
       firstName,
       lastName,
+      nickname,
       loginName,
       department,
       password,
