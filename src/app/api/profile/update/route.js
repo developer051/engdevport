@@ -59,7 +59,7 @@ export async function POST(request) {
         { status: 401 }
       );
     }
-    const user = findUserById(userId);
+    const user = await findUserById(userId);
     
     if (!user) {
       return NextResponse.json(
@@ -154,7 +154,7 @@ export async function POST(request) {
     }
     
     // Update user
-    const updatedUser = updateUser(userId, updateData);
+    const updatedUser = await updateUser(userId, updateData);
     
     if (!updatedUser) {
       return NextResponse.json(

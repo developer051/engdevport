@@ -7,7 +7,7 @@ export const getGeminiResponse = async (prompt, conversationHistory = []) => {
   try {
     // ตรวจสอบ API Key
     const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-    if (!apiKey || apiKey === 'demo-key' || apiKey === 'your_actual_gemini_api_key_here') {
+    if (!apiKey || apiKey === 'demo-key') {
       throw new Error('API Key ไม่ถูกต้องหรือยังไม่ได้ตั้งค่า');
     }
 

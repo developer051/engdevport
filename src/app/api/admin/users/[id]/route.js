@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { updateUser, deleteUser } from '../../../../lib/jsondb';
+import { updateUser, deleteUser } from '../../../../lib/dbFallback';
 
 export async function PUT(request, { params }) {
   try {

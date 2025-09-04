@@ -21,30 +21,46 @@ const RegisterPage = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   const departments = [
-    "Computer Science",
-    "Data Science", 
-    "Artificial Intelligence",
-    "Software Engineering",
-    "Information Technology",
-    "Cybersecurity",
-    "Underwriting and Claims  ",
-    "Administration",
+    "Actuarial",
     "Agency",
-    "Telemarketing",
-    "Marketing",
-    "Sales",
+    "Broker",
+    "Business Development and Partnership",
+    "Business Development and Sales Support",
+    "Chief Executive Office",
+    "Claim",
+    "Communication Organization",
+    "Compliance",
     "Customer Service",
-    "HR",
-    "Finance",
+    "Executive Assistant",
+    "Finance and Accounting",
+    "Finance and Investment",
+    "Human Resources",
+    "Information Technology",
+    "Information Technology Division",
+    "Internal Audit",
+    "Investment",
     "Legal",
+    "Limited Brokerage Dealing Underwriting (LBDU)",
+    "Management and Corporate Support",
+    "Office Management",
+    "Operating System Testing",
+    "Operations",
+    "Policy Owner Service",
+    "Processing Group",
+    "Product",
+    "Purchase",
     "Risk Management",
-    "Business Development",
-    "Project Management",
-    "Data Analytics",
-    "Data Engineering",
+    "Sales Compensation Management",
+    "Sales Support",
+    "Support Broker and Wealth",
+    "Telemarketing",
+    "Telemarketing Management",
+    "Training and Channel Development",
+    "Underwriting",
+    "Underwriting (DMC)",
+    "Wealth Management",
     "Other"
   ];
 
@@ -123,7 +139,6 @@ const RegisterPage = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setError("");
-    setSuccess("");
 
     // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
@@ -162,7 +177,9 @@ const RegisterPage = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setSuccess(data.message);
+        // แสดง popup แจ้งเตือน
+        alert("การสมัครเสร็จสมบูรณ์ สามารถ logon เพื่อเข้าใช้งานระบบ");
+        
         // Reset form
         setFormData({
           firstName: "",
@@ -176,10 +193,8 @@ const RegisterPage = () => {
           runningExperience: []
         });
         
-        // Redirect to login after 2 seconds
-        setTimeout(() => {
-          router.push('/login');
-        }, 2000);
+        // Redirect ไปหน้าแรก
+        router.push('/');
       } else {
         setError(data.error || 'เกิดข้อผิดพลาดในการสมัครสมาชิก');
       }
@@ -228,17 +243,10 @@ const RegisterPage = () => {
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-lg p-10 shadow-xl border border-gray-200">
             
-            {/* Error/Success Messages */}
+            {/* Error Message */}
             {error && (
               <div className="mb-6 p-4 bg-red-100 border border-red-300 rounded-lg text-red-700">
                 {error}
-              </div>
-            )}
-            
-            {success && (
-              <div className="mb-6 p-4 bg-green-100 border border-green-300 rounded-lg text-green-700">
-                {success}
-                <div className="text-sm mt-2">กำลังเปลี่ยนเส้นทางไปหน้าเข้าสู่ระบบ...</div>
               </div>
             )}
 
