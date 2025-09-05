@@ -471,7 +471,7 @@ const LeaderboardPage = () => {
                         {users.reduce(
                           (sum, user) => sum + (user.totalDistance || 0),
                           0
-                        )}{" "}
+                        ).toFixed(2)}{" "}
                         km
                       </div>
                       <div className="text-sm text-gray-600">
