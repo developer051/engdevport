@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import NavBar2 from "../components/NavBar2";
 import Footer from "../components/Footer";
 
@@ -9,10 +10,24 @@ const LeaderboardPage = () => {
   const [error, setError] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [showImageModal, setShowImageModal] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     fetchLeaderboard();
+    checkCurrentUser();
   }, []);
+
+  const checkCurrentUser = () => {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      try {
+        setCurrentUser(JSON.parse(userData));
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+        localStorage.removeItem('user');
+      }
+    }
+  };
 
   const fetchLeaderboard = async () => {
     try {
@@ -48,7 +63,7 @@ const LeaderboardPage = () => {
   const getRankIcon = (rank) => {
     switch (rank) {
       case 1:
-        return "🥇"; 
+        return "🥇";
       case 2:
         return "🥈";
       case 3:
@@ -71,7 +86,7 @@ const LeaderboardPage = () => {
               Leader<span className="text-orange-400">board</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              ส่งได้แค่วันละ 1 ครั้ง ถ้าส่งมากกว่า 1 ครั้งจะนับระยะทางสะสมของวันที่ส่งล่าสุด
+              จะวิ่ง จะเดิน ในสวน cityrun หรือเดินบนเครื่อง หากเก็บระยะทางได้ก็ส่งผลการวิ่งทุกวัน
             </p>
           </div>
         </div>
@@ -106,7 +121,7 @@ const LeaderboardPage = () => {
                   {/* Top 3 Podium */}
                   {users.length >= 3 && (
                     <div className="mb-12">
-                      <div className="flex justify-center items-end space-x-6 mb-8">
+                      <div className="flex justify-center items-end space-x-20 mb-8">
                         {/* 2nd Place */}
                         <div className="text-center">
                           <div className="bg-gradient-to-b from-gray-100 to-gray-200 border-2 border-gray-400 rounded-xl p-6 w-48 h-40 flex flex-col justify-center shadow-lg">
@@ -121,26 +136,39 @@ const LeaderboardPage = () => {
                             <div className="text-sm font-semibold text-gray-700 mb-1 truncate">
                               {users[1]?.firstName} {users[1]?.lastName}
                             </div>
-                                                         <div className="text-xs text-gray-500 mb-2">
-                               {users[1]?.firstName} {users[1]?.lastName}
-                             </div>
-                                                         <div className="text-lg font-bold text-gray-700">
-                               {users[1]?.totalDistance} km
-                             </div>
-                             {users[1]?.latestRun && users[1]?.latestRun.imagePath && (
-                               <button
-                                 onClick={() => {
-                                   setSelectedImage(users[1].latestRun.imagePath);
-                                   setShowImageModal(true);
-                                 }}
-                                 className="mt-2 text-blue-600 hover:text-blue-800 transition-colors duration-200"
-                                 title="ภาพผลการวิ่งล่าสุด"
-                               >
-                                 <svg className="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                 </svg>
-                               </button>
-                             )}
+                            <div className="text-xs text-gray-500 mb-2">
+                              {users[1]?.firstName} {users[1]?.lastName}
+                            </div>
+                            <div className="text-lg font-bold text-gray-700">
+                              {users[1]?.totalDistance} km
+                            </div>
+                            {users[1]?.latestRun &&
+                              users[1]?.latestRun.imagePath && (
+                                <button
+                                  onClick={() => {
+                                    setSelectedImage(
+                                      users[1].latestRun.imagePath
+                                    );
+                                    setShowImageModal(true);
+                                  }}
+                                  className="mt-2 text-blue-600 hover:text-blue-800 transition-colors duration-200"
+                                  title="ภาพผลการวิ่งล่าสุด"
+                                >
+                                  <svg
+                                    className="w-5 h-5 mx-auto"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                    />
+                                  </svg>
+                                </button>
+                              )}
                           </div>
                         </div>
 
@@ -158,26 +186,39 @@ const LeaderboardPage = () => {
                             <div className="text-base font-semibold text-yellow-600 mb-1 truncate">
                               {users[0]?.firstName} {users[0]?.lastName}
                             </div>
-                                                         <div className="text-xs text-gray-600 mb-2">
-                               {users[0]?.firstName} {users[0]?.lastName}
-                             </div>
-                                                         <div className="text-2xl font-bold text-yellow-600">
-                               {users[0]?.totalDistance} km
-                             </div>
-                             {users[0]?.latestRun && users[0]?.latestRun.imagePath && (
-                               <button
-                                 onClick={() => {
-                                   setSelectedImage(users[0].latestRun.imagePath);
-                                   setShowImageModal(true);
-                                 }}
-                                 className="mt-2 text-blue-600 hover:text-blue-800 transition-colors duration-200"
-                                 title="ดูภาพการวิ่งล่าสุด"
-                               >
-                                 <svg className="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                 </svg>
-                               </button>
-                             )}
+                            <div className="text-xs text-gray-600 mb-2">
+                              {users[0]?.firstName} {users[0]?.lastName}
+                            </div>
+                            <div className="text-2xl font-bold text-yellow-600">
+                              {users[0]?.totalDistance} km
+                            </div>
+                            {users[0]?.latestRun &&
+                              users[0]?.latestRun.imagePath && (
+                                <button
+                                  onClick={() => {
+                                    setSelectedImage(
+                                      users[0].latestRun.imagePath
+                                    );
+                                    setShowImageModal(true);
+                                  }}
+                                  className="mt-2 text-blue-600 hover:text-blue-800 transition-colors duration-200"
+                                  title="ดูภาพการวิ่งล่าสุด"
+                                >
+                                  <svg
+                                    className="w-5 h-5 mx-auto"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                    />
+                                  </svg>
+                                </button>
+                              )}
                           </div>
                         </div>
 
@@ -195,26 +236,39 @@ const LeaderboardPage = () => {
                             <div className="text-sm font-semibold text-amber-700 mb-1 truncate">
                               {users[2]?.firstName} {users[2]?.lastName}
                             </div>
-                                                         <div className="text-xs text-gray-600 mb-2">
-                               {users[2]?.firstName} {users[2]?.lastName}
-                             </div>
-                                                         <div className="text-lg font-bold text-amber-700">
-                               {users[2]?.totalDistance} km
-                             </div>
-                             {users[2]?.latestRun && users[2]?.latestRun.imagePath && (
-                               <button
-                                 onClick={() => {
-                                   setSelectedImage(users[2].latestRun.imagePath);
-                                   setShowImageModal(true);
-                                 }}
-                                 className="mt-2 text-blue-600 hover:text-blue-800 transition-colors duration-200"
-                                 title="ดูภาพการวิ่งล่าสุด"
-                               >
-                                 <svg className="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                 </svg>
-                               </button>
-                             )}
+                            <div className="text-xs text-gray-600 mb-2">
+                              {users[2]?.firstName} {users[2]?.lastName}
+                            </div>
+                            <div className="text-lg font-bold text-amber-700">
+                              {users[2]?.totalDistance} km
+                            </div>
+                            {users[2]?.latestRun &&
+                              users[2]?.latestRun.imagePath && (
+                                <button
+                                  onClick={() => {
+                                    setSelectedImage(
+                                      users[2].latestRun.imagePath
+                                    );
+                                    setShowImageModal(true);
+                                  }}
+                                  className="mt-2 text-blue-600 hover:text-blue-800 transition-colors duration-200"
+                                  title="ดูภาพการวิ่งล่าสุด"
+                                >
+                                  <svg
+                                    className="w-5 h-5 mx-auto"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                    />
+                                  </svg>
+                                </button>
+                              )}
                           </div>
                         </div>
                       </div>
@@ -248,10 +302,10 @@ const LeaderboardPage = () => {
                             การวิ่งล่าสุด
                           </th>
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                            วันที่สมัคร
+                            ภาพผลการวิ่งล่าสุด
                           </th>
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                            ภาพผลการวิ่งล่าสุด
+                            แก้ไข
                           </th>
                         </tr>
                       </thead>
@@ -328,27 +382,62 @@ const LeaderboardPage = () => {
                                   <div className="text-sm text-gray-400">-</div>
                                 )}
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                {new Date(user.createdAt).toLocaleDateString(
-                                  "th-TH"
-                                )}
-                              </td>
                               <td className="px-6 py-4 whitespace-nowrap">
                                 {user.latestRun && user.latestRun.imagePath ? (
                                   <button
                                     onClick={() => {
-                                      setSelectedImage(user.latestRun.imagePath);
+                                      setSelectedImage(
+                                        user.latestRun.imagePath
+                                      );
                                       setShowImageModal(true);
                                     }}
                                     className="text-blue-600 hover:text-blue-800 transition-colors duration-200"
                                     title="ดูภาพการวิ่งล่าสุด"
                                   >
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    <svg
+                                      className="w-6 h-6"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                      />
                                     </svg>
                                   </button>
                                 ) : (
-                                  <span className="text-gray-400 text-sm">ไม่มีภาพ</span>
+                                  <span className="text-gray-400 text-sm">
+                                    ไม่มีภาพ
+                                  </span>
+                                )}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                {currentUser && currentUser.id === user.id ? (
+                                  <Link
+                                    href="/running-result/edit"
+                                    className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors duration-200"
+                                    title="แก้ไขการส่งผล"
+                                  >
+                                    <svg
+                                      className="w-4 h-4 mr-1"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                      />
+                                    </svg>
+                                    แก้ไขการส่งผล
+                                  </Link>
+                                ) : (
+                                  <span className="text-gray-400 text-sm">-</span>
                                 )}
                               </td>
                             </tr>
@@ -377,12 +466,18 @@ const LeaderboardPage = () => {
                         การวิ่งทั้งหมด
                       </div>
                     </div>
-                                         <div className="bg-white border border-gray-200 rounded-lg p-6 text-center shadow-md">
-                       <div className="text-2xl font-bold text-yellow-400">
-                         {users.reduce((sum, user) => sum + (user.totalDistance || 0), 0)} km
-                       </div>
-                       <div className="text-sm text-gray-600">ระยะทางรวมของทุกคน</div>
-                     </div>
+                    <div className="bg-white border border-gray-200 rounded-lg p-6 text-center shadow-md">
+                      <div className="text-2xl font-bold text-yellow-400">
+                        {users.reduce(
+                          (sum, user) => sum + (user.totalDistance || 0),
+                          0
+                        )}{" "}
+                        km
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        ระยะทางรวมของทุกคน
+                      </div>
+                    </div>
                     <div className="bg-white border border-gray-200 rounded-lg p-6 text-center shadow-md">
                       <div className="text-2xl font-bold text-orange-300">
                         {users.length > 0
@@ -418,8 +513,18 @@ const LeaderboardPage = () => {
               }}
               className="absolute top-4 right-4 text-white hover:text-gray-300 z-10 bg-black bg-opacity-50 rounded-full p-2"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
             <img

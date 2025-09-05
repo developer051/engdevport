@@ -107,12 +107,25 @@ const NavBar2 = () => {
                 >
                   แก้ไขโปรไฟล์
                 </Link>
-                <button
-                  onClick={handleLogout}
-                  className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-lg font-medium transition-all duration-300 ease-in-out hover:shadow-lg transform hover:-translate-y-0.5"
-                >
-                  ออกจากระบบ
-                </button>
+                                 <button
+                   onClick={handleLogout}
+                   className="bg-red-500 hover:bg-red-600 text-white p-3 rounded-md transition-all duration-300 ease-in-out hover:shadow-lg transform hover:-translate-y-0.5"
+                   title="ออกจากระบบ"
+                 >
+                   <svg
+                     className="w-7 h-7"
+                     fill="currentColor"
+                     viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg"
+                   >
+                     <path
+                       fillRule="evenodd"
+                       d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H6zm0 2h8v16H6V4zm8 4a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0V9a1 1 0 0 1 1-1zm-2 4a1 1 0 1 1 2 0 1 1 0 0 1-2 0z"
+                       clipRule="evenodd"
+                     />
+                     <path d="M18 8l4 4-4 4v-3h-4v-2h4V8z" />
+                   </svg>
+                 </button>
                </div>
              ) : (
               <div className="flex items-center space-x-2">
@@ -216,12 +229,26 @@ const NavBar2 = () => {
                    >
                      แก้ไขโปรไฟล์
                    </Link>
-                   <button
-                     onClick={handleLogout}
-                     className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-lg font-medium w-full transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5"
-                   >
-                     ออกจากระบบ
-                   </button>
+                                       <button
+                      onClick={handleLogout}
+                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-md text-lg font-medium w-full transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center space-x-2"
+                      title="ออกจากระบบ"
+                    >
+                      <svg
+                        className="w-6 h-6"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H6zm0 2h8v16H6V4zm8 4a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0V9a1 1 0 0 1 1-1zm-2 4a1 1 0 1 1 2 0 1 1 0 0 1-2 0z"
+                          clipRule="evenodd"
+                        />
+                        <path d="M18 8l4 4-4 4v-3h-4v-2h4V8z" />
+                      </svg>
+                      <span>ออกจากระบบ</span>
+                    </button>
                  </div>
                </div>
              ) : (

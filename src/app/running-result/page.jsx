@@ -340,7 +340,7 @@ export default function RunningResultPage() {
                     กำลังส่งข้อมูล...
                   </div>
                 ) : (
-                  'ส่งผลการวิ่ง'
+                  'ส่งผลการวิ่ง / เดิน'
                 )}
               </button>
             </form>

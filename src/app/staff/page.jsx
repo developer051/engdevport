@@ -105,7 +105,7 @@ const StaffPage = () => {
                     {/* Member Info */}
                     <div className="p-6">
                       <h3 className="text-xl font-bold text-gray-800 mb-2 tracking-wide">
-                        {user.firstName} {user.lastName}{user.nickname && ` ${user.nickname}`}
+                        {user.firstName} {user.lastName}{user.nickname && ` [${user.nickname}]`}
                       </h3>
                       <p className="text-sm font-medium mb-4 text-orange-400">
                         {user.department}

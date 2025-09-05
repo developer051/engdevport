@@ -127,8 +127,8 @@ const GalleryPage = () => {
                   <button
                     onClick={() => setIsAutoPlaying(!isAutoPlaying)}
                     className={`p-2 rounded-lg transition-colors ${isAutoPlaying
-                        ? 'bg-orange-500 text-white hover:bg-orange-600'
-                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      ? 'bg-orange-500 text-white hover:bg-orange-600'
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                       }`}
                     title={isAutoPlaying ? "หยุดการเลื่อนอัตโนมัติ" : "เริ่มการเลื่อนอัตโนมัติ"}
                   >
@@ -322,8 +322,8 @@ const GalleryPage = () => {
                     key={image.id}
                     onClick={() => handleManualNavigation(() => setSelectedImage(index))}
                     className={`flex-shrink-0 relative w-20 h-16 rounded-lg overflow-hidden border-2 transition-all duration-200 ${index === selectedImage
-                        ? "border-orange-400 shadow-lg shadow-orange-400/50"
-                        : "border-gray-300 hover:border-orange-300"
+                      ? "border-orange-400 shadow-lg shadow-orange-400/50"
+                      : "border-gray-300 hover:border-orange-300"
                       }`}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -345,12 +345,6 @@ const GalleryPage = () => {
 
         {/* Gallery Info */}
         <div className="bg-white py-8 border-t border-orange-100">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-
-            <div className="text-xs text-gray-500">
-              Powered by <span className="text-orange-400">Supachai.O</span>
-            </div>
-          </div>
         </div>
       </div>
 
