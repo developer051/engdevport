@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -15,6 +14,7 @@ const features = [
     desc: "สวนไหนสวย สวนไหนดี วิ่งแล้วได้ NewPB แนะนำกันเล้ย",
     icon: <span style={{ fontSize: "4rem", lineHeight: 1 }}>🗺️</span>,
     color: "from-orange-600 to-orange-300",
+    link: "/park",
   },
   {
     title: "คอมมิวนิตี้",
@@ -67,23 +67,45 @@ export default function HomeSections() {
               viewport={{ once: true }}
               className="group relative"
             >
-              <div className="relative p-8 rounded-3xl bg-gradient-to-br from-gray-50 to-white border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                {/* Icon */}
-                <div
-                  className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${feature.color} flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform duration-300`}
-                >
-                  {feature.icon}
+              {feature.link ? (
+                <Link href={feature.link}>
+                  <div className="relative p-8 rounded-3xl bg-gradient-to-br from-gray-50 to-white border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer">
+                    {/* Icon */}
+                    <div
+                      className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${feature.color} flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform duration-300`}
+                    >
+                      {feature.icon}
+                    </div>
+
+                    {/* Content */}
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">
+                      {feature.title}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">{feature.desc}</p>
+
+                    {/* Hover Effect */}
+                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-orange-500/5 to-yellow-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  </div>
+                </Link>
+              ) : (
+                <div className="relative p-8 rounded-3xl bg-gradient-to-br from-gray-50 to-white border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                  {/* Icon */}
+                  <div
+                    className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${feature.color} flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform duration-300`}
+                  >
+                    {feature.icon}
+                  </div>
+
+                  {/* Content */}
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-600 leading-relaxed">{feature.desc}</p>
+
+                  {/* Hover Effect */}
+                  <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-orange-500/5 to-yellow-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
-
-                {/* Content */}
-                <h3 className="text-xl font-bold text-gray-900 mb-3">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-600 leading-relaxed">{feature.desc}</p>
-
-                {/* Hover Effect */}
-                <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-orange-500/5 to-yellow-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              </div>
+              )}
             </motion.div>
           ))}
         </div>

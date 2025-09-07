@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
@@ -6,7 +6,7 @@ const Banner = () => {
   const [stats, setStats] = useState({
     activeMembers: 0,
     totalRuns: 0,
-    uniqueEvents: 0
+    totalDistance: 0
   });
   const [latestRunner, setLatestRunner] = useState(null);
   const [latestUser, setLatestUser] = useState(null);
@@ -469,17 +469,17 @@ const Banner = () => {
                   variants={numberVariants}
                   initial="hidden"
                   animate="visible"
-                  key={stats.uniqueEvents}
+                  key={stats.totalDistance}
                 >
                   {loading ? (
                     <motion.div 
                       className="w-8 h-8 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin mx-auto"
                     />
                   ) : (
-                    stats.uniqueEvents || 12
+                    stats.totalDistance || 0
                   )}
                 </motion.div>
-                <div className="text-sm font-semibold text-gray-600">งานวิ่ง/ปี</div>
+                <div className="text-sm font-semibold text-gray-600">กม. รวม</div>
               </motion.div>
               <motion.div 
                 className="text-center p-6 rounded-3xl bg-white/90 backdrop-blur-md shadow-xl border border-orange-200 hover:shadow-2xl transition-all duration-300"
@@ -497,10 +497,10 @@ const Banner = () => {
                       className="w-8 h-8 border-4 border-pink-500 border-t-transparent rounded-full animate-spin mx-auto"
                     />
                   ) : (
-                    "24/7"
+                    stats.totalRuns || 0
                   )}
                 </motion.div>
-                <div className="text-sm font-semibold text-gray-600">ชุมชน</div>
+                <div className="text-sm font-semibold text-gray-600">การวิ่งทั้งหมด</div>
               </motion.div>
             </motion.div>
           </div>
@@ -648,7 +648,7 @@ const Banner = () => {
                           className="text-sm sm:text-base md:text-lg lg:text-xl font-medium text-gray-800 leading-relaxed"
                         >
                           {showContent === 0 && latestRunner ? (
-                            <div>
+                            <div className="text-left">
                               <div className="mb-2">
                                 <span className="text-orange-600 font-bold">🏃‍♂️ {latestRunner.userName}</span>
                               </div>
@@ -689,7 +689,7 @@ const Banner = () => {
                               </motion.div>
                             </div>
                           ) : showContent === 1 ? (
-                            <div>
+                            <div className="text-left">
                               "ช่วงนี้ฝนตกบ่อย รักษาสุขภาพกันด้วยจร้า"
                               <motion.span 
                                 className="inline-block ml-2"
@@ -722,7 +722,7 @@ const Banner = () => {
                               </motion.span>
                             </div>
                           ) : showContent === 2 && latestUser ? (
-                            <div>
+                            <div className="text-left">
                               <div className="mb-2">
                                 <span className="text-purple-600 font-bold">ยินดีต้อนรับ</span>
                               </div>
