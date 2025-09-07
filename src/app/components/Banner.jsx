@@ -9,9 +9,11 @@ const Banner = () => {
     uniqueEvents: 0
   });
   const [latestRunner, setLatestRunner] = useState(null);
+  const [latestUser, setLatestUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [runnerLoading, setRunnerLoading] = useState(true);
-  const [showRunner, setShowRunner] = useState(true);
+  const [userLoading, setUserLoading] = useState(true);
+  const [showContent, setShowContent] = useState(0); // 0: runner, 1: message, 2: user
 
   // ดึงข้อมูลสถิติจาก API
   useEffect(() => {
@@ -51,10 +53,29 @@ const Banner = () => {
     fetchLatestRunner();
   }, []);
 
-  // สลับข้อความทุก 4 วินาที
+  // ดึงข้อมูลผู้ใช้ล่าสุด
+  useEffect(() => {
+    const fetchLatestUser = async () => {
+      try {
+        const response = await fetch('/api/latest-user');
+        if (response.ok) {
+          const data = await response.json();
+          setLatestUser(data.latestUser);
+        }
+      } catch (error) {
+        console.error('Error fetching latest user:', error);
+      } finally {
+        setUserLoading(false);
+      }
+    };
+
+    fetchLatestUser();
+  }, []);
+
+  // สลับข้อความทุก 4 วินาที (3 ข้อความ: runner, message, user)
   useEffect(() => {
     const interval = setInterval(() => {
-      setShowRunner(prev => !prev);
+      setShowContent(prev => (prev + 1) % 3);
     }, 4000);
 
     return () => clearInterval(interval);
@@ -611,7 +632,7 @@ const Banner = () => {
                       initial="hidden"
                       animate="visible"
                     >
-                      {runnerLoading ? (
+                      {(runnerLoading || userLoading) ? (
                         <div className="flex items-center justify-center">
                           <motion.div 
                             className="w-6 h-6 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"
@@ -619,23 +640,97 @@ const Banner = () => {
                         </div>
                       ) : (
                         <motion.div
-                          key={showRunner ? 'runner' : 'message'}
+                          key={showContent}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -10 }}
                           transition={{ duration: 0.5 }}
                           className="text-sm sm:text-base md:text-lg lg:text-xl font-medium text-gray-800 leading-relaxed"
                         >
-                          {showRunner && latestRunner ? (
+                          {showContent === 0 && latestRunner ? (
                             <div>
                               <div className="mb-2">
                                 <span className="text-orange-600 font-bold">🏃‍♂️ {latestRunner.userName}</span>
                               </div>
                               <div className="text-xs sm:text-sm md:text-base">
-                                วิ่งล่าสุด: <span className="font-bold text-green-600">{latestRunner.distance} {latestRunner.distanceUnit}</span>
+                                ส่งผลการวิ่งล่าสุด: <span className="font-bold text-green-600">{latestRunner.distance} {latestRunner.distanceUnit}</span>
                               </div>
                               <div className="text-xs sm:text-sm md:text-base">
                                 เวลา: <span className="font-bold text-blue-600">{latestRunner.time}</span>
+                              </div>
+                              <motion.div 
+                                className="inline-block ml-2 mt-1"
+                                animate={{ 
+                                  scale: [1, 1.2, 1],
+                                  rotate: [0, 10, -10, 0]
+                                }}
+                                transition={{ 
+                                  duration: 2,
+                                  repeat: Infinity,
+                                  ease: "easeInOut"
+                                }}
+                              >
+                                ❤️
+                              </motion.div>
+                              <motion.div 
+                                className="inline-block ml-1 mt-1"
+                                animate={{ 
+                                  scale: [1, 1.2, 1],
+                                  rotate: [0, -10, 10, 0]
+                                }}
+                                transition={{ 
+                                  duration: 2,
+                                  repeat: Infinity,
+                                  ease: "easeInOut",
+                                  delay: 0.5
+                                }}
+                              >
+                                🧡
+                              </motion.div>
+                            </div>
+                          ) : showContent === 1 ? (
+                            <div>
+                              "ช่วงนี้ฝนตกบ่อย รักษาสุขภาพกันด้วยจร้า"
+                              <motion.span 
+                                className="inline-block ml-2"
+                                animate={{ 
+                                  scale: [1, 1.2, 1],
+                                  rotate: [0, 10, -10, 0]
+                                }}
+                                transition={{ 
+                                  duration: 2,
+                                  repeat: Infinity,
+                                  ease: "easeInOut"
+                                }}
+                              >
+                                ❤️
+                              </motion.span>
+                              <motion.span 
+                                className="inline-block ml-1"
+                                animate={{ 
+                                  scale: [1, 1.2, 1],
+                                  rotate: [0, -10, 10, 0]
+                                }}
+                                transition={{ 
+                                  duration: 2,
+                                  repeat: Infinity,
+                                  ease: "easeInOut",
+                                  delay: 0.5
+                                }}
+                              >
+                                🧡
+                              </motion.span>
+                            </div>
+                          ) : showContent === 2 && latestUser ? (
+                            <div>
+                              <div className="mb-2">
+                                <span className="text-purple-600 font-bold">ยินดีต้อนรับ</span>
+                              </div>
+                              <div className="text-lg sm:text-xl md:text-2xl">
+                                <span className="font-bold text-pink-600">👋 {latestUser.userName}</span>
+                              </div>
+                              <div className="text-xs sm:text-sm md:text-base">
+                                สมาชิกใหม่ล่าสุด
                               </div>
                               <motion.div 
                                 className="inline-block ml-2 mt-1"

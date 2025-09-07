@@ -342,19 +342,19 @@
     "runningDate": "2025-09-05"
   },
   {
-    "id": "1757208631572",
+    "id": "1757212038296",
     "userId": "1756449327094utwhx1c28",
     "userName": "supachai ocharos",
-    "hours": 1,
-    "minutes": 0,
-    "seconds": 0,
-    "totalSeconds": 3600,
+    "hours": 0,
+    "minutes": 56,
+    "seconds": 56,
+    "totalSeconds": 3416,
     "distance": 5,
     "distanceUnit": "km",
     "distanceInKm": 5,
-    "imagePath": "/uploads/running-results/1756449327094utwhx1c28_1757208631551.jpg",
+    "imagePath": "/uploads/running-results/1756449327094utwhx1c28_1757212038277.jpg",
     "score": 50,
-    "submittedAt": "2025-09-07T00:00:00.000Z",
-    "runningDate": "2025-09-07"
+    "submittedAt": "2025-09-06T00:00:00.000Z",
+    "runningDate": "2025-09-06"
   }
 ]
