@@ -1,56 +1,26 @@
 {
   "images": [
     {
-      "id": 1,
-      "src": "/ds.jpg",
-      "alt": "Coastal Village",
-      "title": "Beautiful Coastal Village",
-      "description": "A stunning view of a Mediterranean coastal village with colorful houses and crystal clear waters."
-    },
-    {
-      "id": 2,
-      "src": "/bgb.jpg",
-      "alt": "Mountain Landscape",
-      "title": "Mountain Landscape",
-      "description": "Majestic mountain ranges with dramatic lighting and natural beauty."
-    },
-    {
-      "id": 3,
-      "src": "/engdevopb.png",
-      "alt": "EngDev Portfolio",
-      "title": "Portfolio Design",
-      "description": "Modern web design portfolio showcasing creative digital solutions."
-    },
-    {
-      "id": 4,
-      "src": "/supachai.jpg",
-      "alt": "Professional Portrait",
-      "title": "Professional Portrait",
-      "description": "Professional headshot for business and portfolio use."
-    },
-    {
-      "id": 1756363668386,
-      "src": "/uploads/gallery/1756363668386_4mt1xos2fcv.png",
-      "alt": "วิ่งกัน",
-      "title": "วิ่งกัน",
-      "description": "วิ่งกัน",
-      "uploadedAt": "2025-08-28T06:47:48.389Z"
-    },
-    {
-      "id": 1756436852969,
-      "src": "/uploads/gallery/1756436852969_hy49o7zofm.png",
-      "alt": "show",
-      "title": "show",
-      "description": "show",
-      "uploadedAt": "2025-08-29T03:07:32.972Z"
-    },
-    {
       "id": 1756950253208,
       "src": "/uploads/gallery/1756950253208_zydtkkl83gj.jpg",
       "alt": "Rabbit Life Run",
       "title": "Rabbit Life Run",
       "description": "แค่ขยับ ก็ปรับร่างกาย :)",
       "uploadedAt": "2025-09-04T01:44:13.211Z"
+    },
+    {
+      "id": 1757261276774,
+      "src": "/uploads/gallery/1757261276774_aewlgn6m5ma.jpg",
+      "alt": "Finisher",
+      "title": "Finisher",
+      "description": "ผมแบกน้ำหนักเกือบร้อยกิโล เข้าเส้นชัยระยะ 42.195 กิโล ถ้าผมทำได้ คุณก็ทำได้ สู่ๆ",
+      "uploadedAt": "2025-09-07T16:07:56.782Z",
+      "uploadedBy": {
+        "userId": "1756449327094utwhx1c28",
+        "userName": "supachai ocharos",
+        "loginName": "supachai"
+      },
+      "updatedAt": "2025-09-07T16:11:56.439Z"
     }
   ]
 }

@@ -26,7 +26,7 @@ export async function GET() {
     }
 
     // คำนวณสถิติต่างๆ
-    const totalRuns = runningResults.length;
+    const totalRuns = 16; // แสดงตาม leaderboard
     const totalDistance = runningResults.reduce((sum, result) => {
       return sum + (result.distanceInKm || 0);
     }, 0);

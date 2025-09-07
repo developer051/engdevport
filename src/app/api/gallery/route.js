@@ -1,10 +1,6 @@
 import { NextResponse } from 'next/server';
 import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export async function POST(request) {
   try {
@@ -21,11 +17,12 @@ export async function POST(request) {
     }
 
     // ตรวจสอบ JWT token
+    let decoded;
     try {
       const jwt = await import('jsonwebtoken');
       const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
       
-      const decoded = jwt.verify(token.value, JWT_SECRET);
+      decoded = jwt.verify(token.value, JWT_SECRET);
       if (!decoded || !decoded.userId) {
         return NextResponse.json(
           { error: 'เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่' },
@@ -91,6 +88,16 @@ export async function POST(request) {
     const buffer = Buffer.from(bytes);
     await writeFile(filePath, buffer);
 
+    // ดึงข้อมูลผู้ใช้
+    const { findUserById } = await import('@/lib/dbFallback');
+    const currentUser = await findUserById(decoded.userId);
+    if (!currentUser) {
+      return NextResponse.json(
+        { error: 'ไม่พบข้อมูลผู้ใช้' },
+        { status: 401 }
+      );
+    }
+
     // สร้างข้อมูลภาพใหม่
     const newImage = {
       id: timestamp,
@@ -98,7 +105,12 @@ export async function POST(request) {
       alt: title,
       title: title,
       description: description,
-      uploadedAt: new Date().toISOString()
+      uploadedAt: new Date().toISOString(),
+      uploadedBy: {
+        userId: currentUser.originalId || currentUser.id,
+        userName: `${currentUser.firstName} ${currentUser.lastName}`,
+        loginName: currentUser.loginName
+      }
     };
 
     // บันทึกข้อมูลลงไฟล์ JSON
@@ -130,6 +142,239 @@ export async function POST(request) {
     console.error('Gallery upload error:', error);
     return NextResponse.json(
       { error: 'เกิดข้อผิดพลาดในการอัปโหลดภาพ' },
+      { status: 500 }
+    );
+  }
+}
+
+// แก้ไขข้อมูลภาพ
+export async function PUT(request) {
+  try {
+    // ตรวจสอบ authentication
+    const { cookies } = await import('next/headers');
+    const cookieStore = cookies();
+    const token = cookieStore.get('token');
+    
+    if (!token) {
+      return NextResponse.json(
+        { error: 'กรุณาเข้าสู่ระบบก่อน' },
+        { status: 401 }
+      );
+    }
+
+    let currentUser;
+    try {
+      const jwt = await import('jsonwebtoken');
+      const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+      
+      const decoded = jwt.verify(token.value, JWT_SECRET);
+      if (!decoded || !decoded.userId) {
+        return NextResponse.json(
+          { error: 'เซสชันหมดอายุ' },
+          { status: 401 }
+        );
+      }
+      
+      const { findUserById } = await import('@/lib/dbFallback');
+      currentUser = await findUserById(decoded.userId);
+      if (!currentUser) {
+        return NextResponse.json(
+          { error: 'ไม่พบข้อมูลผู้ใช้' },
+          { status: 401 }
+        );
+      }
+    } catch (authError) {
+      return NextResponse.json(
+        { error: 'เซสชันหมดอายุ' },
+        { status: 401 }
+      );
+    }
+
+    const { imageId, title, description } = await request.json();
+
+    if (!imageId || !title || !description) {
+      return NextResponse.json(
+        { error: 'กรุณากรอกข้อมูลให้ครบถ้วน' },
+        { status: 400 }
+      );
+    }
+
+    // อ่านข้อมูลภาพปัจจุบัน
+    const fs = await import('fs/promises');
+    const galleryDataPath = path.join(process.cwd(), 'data', 'gallery.json');
+    
+    let galleryData = { images: [] };
+    try {
+      const data = await fs.readFile(galleryDataPath, 'utf8');
+      galleryData = JSON.parse(data);
+    } catch (fileError) {
+      return NextResponse.json(
+        { error: 'ไม่พบข้อมูลภาพ' },
+        { status: 404 }
+      );
+    }
+
+    // หาภาพที่ต้องการแก้ไข
+    const imageIndex = galleryData.images.findIndex(img => img.id === imageId);
+    if (imageIndex === -1) {
+      return NextResponse.json(
+        { error: 'ไม่พบภาพที่ต้องการแก้ไข' },
+        { status: 404 }
+      );
+    }
+
+    const image = galleryData.images[imageIndex];
+    
+    // ตรวจสอบว่าเป็นเจ้าของภาพหรือไม่
+    const currentUserId = currentUser.originalId || currentUser.id;
+    if (image.uploadedBy && image.uploadedBy.userId !== currentUserId) {
+      return NextResponse.json(
+        { error: 'คุณไม่มีสิทธิ์แก้ไขภาพนี้' },
+        { status: 403 }
+      );
+    }
+
+    // อัปเดตข้อมูล
+    galleryData.images[imageIndex] = {
+      ...image,
+      title: title,
+      alt: title,
+      description: description,
+      updatedAt: new Date().toISOString()
+    };
+
+    // บันทึกไฟล์
+    await fs.writeFile(galleryDataPath, JSON.stringify(galleryData, null, 2));
+
+    return NextResponse.json({
+      success: true,
+      message: 'แก้ไขภาพสำเร็จ',
+      image: galleryData.images[imageIndex]
+    });
+
+  } catch (error) {
+    console.error('Gallery update error:', error);
+    return NextResponse.json(
+      { error: 'เกิดข้อผิดพลาดในการแก้ไขภาพ' },
+      { status: 500 }
+    );
+  }
+}
+
+// ลบภาพ
+export async function DELETE(request) {
+  try {
+    // ตรวจสอบ authentication
+    const { cookies } = await import('next/headers');
+    const cookieStore = cookies();
+    const token = cookieStore.get('token');
+    
+    if (!token) {
+      return NextResponse.json(
+        { error: 'กรุณาเข้าสู่ระบบก่อน' },
+        { status: 401 }
+      );
+    }
+
+    let currentUser;
+    try {
+      const jwt = await import('jsonwebtoken');
+      const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+      
+      const decoded = jwt.verify(token.value, JWT_SECRET);
+      if (!decoded || !decoded.userId) {
+        return NextResponse.json(
+          { error: 'เซสชันหมดอายุ' },
+          { status: 401 }
+        );
+      }
+      
+      const { findUserById } = await import('@/lib/dbFallback');
+      currentUser = await findUserById(decoded.userId);
+      if (!currentUser) {
+        return NextResponse.json(
+          { error: 'ไม่พบข้อมูลผู้ใช้' },
+          { status: 401 }
+        );
+      }
+    } catch (authError) {
+      return NextResponse.json(
+        { error: 'เซสชันหมดอายุ' },
+        { status: 401 }
+      );
+    }
+
+    const { imageId } = await request.json();
+
+    if (!imageId) {
+      return NextResponse.json(
+        { error: 'ไม่พบรหัสภาพ' },
+        { status: 400 }
+      );
+    }
+
+    // อ่านข้อมูลภาพปัจจุบัน
+    const fs = await import('fs/promises');
+    const galleryDataPath = path.join(process.cwd(), 'data', 'gallery.json');
+    
+    let galleryData = { images: [] };
+    try {
+      const data = await fs.readFile(galleryDataPath, 'utf8');
+      galleryData = JSON.parse(data);
+    } catch (fileError) {
+      return NextResponse.json(
+        { error: 'ไม่พบข้อมูลภาพ' },
+        { status: 404 }
+      );
+    }
+
+    // หาภาพที่ต้องการลบ
+    const imageIndex = galleryData.images.findIndex(img => img.id === imageId);
+    if (imageIndex === -1) {
+      return NextResponse.json(
+        { error: 'ไม่พบภาพที่ต้องการลบ' },
+        { status: 404 }
+      );
+    }
+
+    const image = galleryData.images[imageIndex];
+    
+    // ตรวจสอบว่าเป็นเจ้าของภาพหรือไม่
+    const currentUserId = currentUser.originalId || currentUser.id;
+    if (image.uploadedBy && image.uploadedBy.userId !== currentUserId) {
+      return NextResponse.json(
+        { error: 'คุณไม่มีสิทธิ์ลบภาพนี้' },
+        { status: 403 }
+      );
+    }
+
+    // ลบไฟล์ภาพจากระบบ
+    if (image.src && image.src.startsWith('/uploads/gallery/')) {
+      try {
+        const { unlink } = await import('fs/promises');
+        const imagePath = path.join(process.cwd(), 'public', image.src);
+        await unlink(imagePath);
+      } catch (fileError) {
+        console.error('Error deleting image file:', fileError);
+        // ไม่ return error เพราะอาจเป็นไฟล์ที่ไม่มีอยู่แล้ว
+      }
+    }
+
+    // ลบข้อมูลจาก array
+    galleryData.images.splice(imageIndex, 1);
+
+    // บันทึกไฟล์
+    await fs.writeFile(galleryDataPath, JSON.stringify(galleryData, null, 2));
+
+    return NextResponse.json({
+      success: true,
+      message: 'ลบภาพสำเร็จ'
+    });
+
+  } catch (error) {
+    console.error('Gallery delete error:', error);
+    return NextResponse.json(
+      { error: 'เกิดข้อผิดพลาดในการลบภาพ' },
       { status: 500 }
     );
   }
