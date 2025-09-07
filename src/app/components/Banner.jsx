@@ -8,7 +8,10 @@ const Banner = () => {
     totalRuns: 0,
     uniqueEvents: 0
   });
+  const [latestRunner, setLatestRunner] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [runnerLoading, setRunnerLoading] = useState(true);
+  const [showRunner, setShowRunner] = useState(true);
 
   // ดึงข้อมูลสถิติจาก API
   useEffect(() => {
@@ -27,6 +30,34 @@ const Banner = () => {
     };
 
     fetchStats();
+  }, []);
+
+  // ดึงข้อมูลผู้วิ่งล่าสุด
+  useEffect(() => {
+    const fetchLatestRunner = async () => {
+      try {
+        const response = await fetch('/api/latest-runner');
+        if (response.ok) {
+          const data = await response.json();
+          setLatestRunner(data.latestRunner);
+        }
+      } catch (error) {
+        console.error('Error fetching latest runner:', error);
+      } finally {
+        setRunnerLoading(false);
+      }
+    };
+
+    fetchLatestRunner();
+  }, []);
+
+  // สลับข้อความทุก 4 วินาที
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setShowRunner(prev => !prev);
+    }, 4000);
+
+    return () => clearInterval(interval);
   }, []);
 
   // Enhanced Animation variants
@@ -126,6 +157,66 @@ const Banner = () => {
       transition: {
         duration: 0.5,
         ease: "easeOut"
+      }
+    }
+  };
+
+  // Speech bubble animation
+  const speechBubbleVariants = {
+    hidden: { 
+      scale: 0, 
+      opacity: 0,
+      y: 20,
+      rotate: -5
+    },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      y: 0,
+      rotate: 0,
+      transition: {
+        duration: 0.6,
+        ease: [0.25, 0.46, 0.45, 0.94],
+        delay: 1.5
+      }
+    }
+  };
+
+  // Text typing animation
+  const textVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.3,
+        delay: 2.2
+      }
+    }
+  };
+
+  // Floating animation for speech bubble (cloud-like)
+  const floatingVariants = {
+    animate: {
+      y: [0, -12, 0],
+      rotate: [0, 2, 0],
+      scale: [1, 1.02, 1],
+      transition: {
+        duration: 4,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }
+    }
+  };
+
+  // Cloud puff animation
+  const cloudPuffVariants = {
+    animate: {
+      scale: [1, 1.1, 1],
+      opacity: [0.8, 1, 0.8],
+      transition: {
+        duration: 3,
+        repeat: Infinity,
+        ease: "easeInOut"
       }
     }
   };
@@ -454,6 +545,181 @@ const Banner = () => {
                     WebkitImageRendering: 'high-quality'
                   }}
                 />
+
+                {/* Speech Bubble */}
+                <motion.div
+                  className="absolute -top-4 -right-80 sm:-top-6 sm:-right-78 md:-top-8 md:-right-76 lg:-top-12 lg:-right-72 xl:-top-16 xl:-right-68 z-20"
+                  variants={speechBubbleVariants}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  <motion.div
+                    className="relative bg-white/60 backdrop-blur-sm shadow-2xl border-2 border-orange-200/40 max-w-[220px] sm:max-w-[280px] md:max-w-[320px] lg:max-w-[360px] px-4 py-3 sm:px-6 sm:py-4 md:px-8 md:py-6"
+                    variants={floatingVariants}
+                    animate="animate"
+                    style={{
+                      filter: 'drop-shadow(0 10px 25px rgba(0,0,0,0.15))',
+                      borderRadius: '40px 40px 40px 40px / 50px 50px 50px 50px',
+                      position: 'relative'
+                    }}
+                  >
+                    {/* Cloud shape decorative elements with animation */}
+                    <motion.div 
+                      className="absolute -top-1 -left-1 w-4 h-4 sm:w-5 sm:h-5 bg-white/60 border-2 border-orange-200/40 rounded-full"
+                      variants={cloudPuffVariants}
+                      animate="animate"
+                    ></motion.div>
+                    <motion.div 
+                      className="absolute -top-1 -right-2 w-3 h-3 sm:w-4 sm:h-4 bg-white/60 border-2 border-orange-200/40 rounded-full"
+                      variants={cloudPuffVariants}
+                      animate="animate"
+                      style={{ animationDelay: '0.5s' }}
+                    ></motion.div>
+                    <motion.div 
+                      className="absolute -bottom-1 -left-1 w-4 h-4 sm:w-5 sm:h-5 bg-white/60 border-2 border-orange-200/40 rounded-full"
+                      variants={cloudPuffVariants}
+                      animate="animate"
+                      style={{ animationDelay: '1s' }}
+                    ></motion.div>
+                    <motion.div 
+                      className="absolute -bottom-1 -right-1 w-2 h-2 sm:w-3 sm:h-3 bg-white/60 border-2 border-orange-200/40 rounded-full"
+                      variants={cloudPuffVariants}
+                      animate="animate"
+                      style={{ animationDelay: '1.5s' }}
+                    ></motion.div>
+                    <motion.div 
+                      className="absolute top-1 -left-3 w-2 h-2 sm:w-3 sm:h-3 bg-white/60 border-2 border-orange-200/40 rounded-full"
+                      variants={cloudPuffVariants}
+                      animate="animate"
+                      style={{ animationDelay: '2s' }}
+                    ></motion.div>
+                    <motion.div 
+                      className="absolute top-1 -right-3 w-1 h-1 sm:w-2 sm:h-2 bg-white/60 border-2 border-orange-200/40 rounded-full"
+                      variants={cloudPuffVariants}
+                      animate="animate"
+                      style={{ animationDelay: '2.5s' }}
+                    ></motion.div>
+                    
+                    {/* Cloud tail pointing to rabbit */}
+                    <div className="absolute -bottom-6 left-28 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent" style={{ borderTopColor: 'rgba(255, 255, 255, 0.6)' }}></div>
+                    <div className="absolute -bottom-7 left-27 w-0 h-0 border-l-9 border-r-9 border-t-9 border-l-transparent border-r-transparent" style={{ borderTopColor: 'rgba(251, 146, 60, 0.4)' }}></div>
+                    
+                    {/* Speech bubble content */}
+                    <motion.div
+                      className="relative z-10"
+                      variants={textVariants}
+                      initial="hidden"
+                      animate="visible"
+                    >
+                      {runnerLoading ? (
+                        <div className="flex items-center justify-center">
+                          <motion.div 
+                            className="w-6 h-6 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"
+                          />
+                        </div>
+                      ) : (
+                        <motion.div
+                          key={showRunner ? 'runner' : 'message'}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ duration: 0.5 }}
+                          className="text-sm sm:text-base md:text-lg lg:text-xl font-medium text-gray-800 leading-relaxed"
+                        >
+                          {showRunner && latestRunner ? (
+                            <div>
+                              <div className="mb-2">
+                                <span className="text-orange-600 font-bold">🏃‍♂️ {latestRunner.userName}</span>
+                              </div>
+                              <div className="text-xs sm:text-sm md:text-base">
+                                วิ่งล่าสุด: <span className="font-bold text-green-600">{latestRunner.distance} {latestRunner.distanceUnit}</span>
+                              </div>
+                              <div className="text-xs sm:text-sm md:text-base">
+                                เวลา: <span className="font-bold text-blue-600">{latestRunner.time}</span>
+                              </div>
+                              <motion.div 
+                                className="inline-block ml-2 mt-1"
+                                animate={{ 
+                                  scale: [1, 1.2, 1],
+                                  rotate: [0, 10, -10, 0]
+                                }}
+                                transition={{ 
+                                  duration: 2,
+                                  repeat: Infinity,
+                                  ease: "easeInOut"
+                                }}
+                              >
+                                ❤️
+                              </motion.div>
+                              <motion.div 
+                                className="inline-block ml-1 mt-1"
+                                animate={{ 
+                                  scale: [1, 1.2, 1],
+                                  rotate: [0, -10, 10, 0]
+                                }}
+                                transition={{ 
+                                  duration: 2,
+                                  repeat: Infinity,
+                                  ease: "easeInOut",
+                                  delay: 0.5
+                                }}
+                              >
+                                🧡
+                              </motion.div>
+                            </div>
+                          ) : (
+                            <div>
+                              "ช่วงนี้ฝนตกบ่อย รักษาสุขภาพกันด้วยจร้า"
+                              <motion.span 
+                                className="inline-block ml-2"
+                                animate={{ 
+                                  scale: [1, 1.2, 1],
+                                  rotate: [0, 10, -10, 0]
+                                }}
+                                transition={{ 
+                                  duration: 2,
+                                  repeat: Infinity,
+                                  ease: "easeInOut"
+                                }}
+                              >
+                                ❤️
+                              </motion.span>
+                              <motion.span 
+                                className="inline-block ml-1"
+                                animate={{ 
+                                  scale: [1, 1.2, 1],
+                                  rotate: [0, -10, 10, 0]
+                                }}
+                                transition={{ 
+                                  duration: 2,
+                                  repeat: Infinity,
+                                  ease: "easeInOut",
+                                  delay: 0.5
+                                }}
+                              >
+                                🧡
+                              </motion.span>
+                            </div>
+                          )}
+                        </motion.div>
+                      )}
+                    </motion.div>
+
+                    {/* Decorative elements */}
+                    <motion.div
+                      className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 md:-top-3 md:-right-3 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full opacity-60"
+                      animate={{
+                        scale: [1, 1.3, 1],
+                        rotate: [0, 180, 360],
+                      }}
+                      transition={{
+                        duration: 4,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                    />
+                  </motion.div>
+                </motion.div>
               </motion.div>
 
               {/* Additional decorative elements */}
