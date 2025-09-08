@@ -25,8 +25,17 @@ export async function GET() {
       });
     }
 
-    // หาผู้ส่งผลวิ่งล่าสุด
+    // หาผู้ส่งผลวิ่งล่าสุด (เรียงตามเวลาส่งผล submittedAt)
     const latestResult = runningResults.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt))[0];
+    
+    // Debug logging
+    console.log('Latest runner by submission time:', {
+      userName: latestResult.userName,
+      submittedAt: latestResult.submittedAt,
+      runningDate: latestResult.runningDate,
+      distance: latestResult.distance,
+      distanceUnit: latestResult.distanceUnit
+    });
 
     return NextResponse.json({
       latestRunner: {

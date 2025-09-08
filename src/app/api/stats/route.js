@@ -8,8 +8,8 @@ export async function GET() {
     // ดึงข้อมูลผู้ใช้ทั้งหมด
     const users = await getAllUsers('score', 'desc');
     
-    // นับจำนวนสมาชิกที่ active
-    const activeMembers = users.filter(user => user.isActive).length;
+    // นับจำนวนสมาชิกที่ active (ถ้าไม่มี isActive ให้ถือว่า active ทั้งหมด)
+    const activeMembers = users.filter(user => user.isActive !== false).length;
     
     // ดึงข้อมูลผลการวิ่ง
     const resultsPath = path.join(process.cwd(), 'data', 'running-results.json');
@@ -26,21 +26,46 @@ export async function GET() {
     }
 
     // คำนวณสถิติต่างๆ
-    const totalRuns = 16; // แสดงตาม leaderboard
+    const totalRuns = runningResults.length; // นับจำนวนการวิ่งจริง
     const totalDistance = runningResults.reduce((sum, result) => {
-      return sum + (result.distanceInKm || 0);
+      // ใช้ distanceInKm หรือคำนวณจาก distance และ distanceUnit
+      if (result.distanceInKm) {
+        return sum + result.distanceInKm;
+      } else if (result.distance && result.distanceUnit) {
+        // แปลงหน่วยเป็นกิโลเมตร
+        const distance = parseFloat(result.distance);
+        if (result.distanceUnit.toLowerCase() === 'km') {
+          return sum + distance;
+        } else if (result.distanceUnit.toLowerCase() === 'm') {
+          return sum + (distance / 1000);
+        } else if (result.distanceUnit.toLowerCase() === 'mile') {
+          return sum + (distance * 1.60934);
+        }
+      }
+      return sum;
     }, 0);
 
     // หาจำนวนงานวิ่งที่ไม่ซ้ำกัน (ตามชื่องานวิ่ง)
     const uniqueEvents = new Set(runningResults.map(result => result.eventName || 'งานวิ่งทั่วไป')).size;
 
-    return NextResponse.json({
+    const stats = {
       activeMembers,
       totalRuns,
       totalDistance: Math.round(totalDistance * 100) / 100,
       uniqueEvents,
       totalUsers: users.length
+    };
+
+    // Debug logging
+    console.log('Stats calculated:', {
+      totalUsers: users.length,
+      activeMembers,
+      totalRuns,
+      totalDistance: stats.totalDistance,
+      uniqueEvents
     });
+
+    return NextResponse.json(stats);
 
   } catch (error) {
     console.error('Stats API error:', error);

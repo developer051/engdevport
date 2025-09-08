@@ -22,6 +22,7 @@ const Banner = () => {
         const response = await fetch('/api/stats');
         if (response.ok) {
           const data = await response.json();
+          console.log('Stats received:', data); // Debug log
           setStats(data);
         }
       } catch (error) {
@@ -32,6 +33,10 @@ const Banner = () => {
     };
 
     fetchStats();
+    
+    // Refresh stats every 30 seconds
+    const interval = setInterval(fetchStats, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   // ดึงข้อมูลผู้วิ่งล่าสุด
@@ -41,6 +46,7 @@ const Banner = () => {
         const response = await fetch('/api/latest-runner');
         if (response.ok) {
           const data = await response.json();
+          console.log('Latest runner received:', data); // Debug log
           setLatestRunner(data.latestRunner);
         }
       } catch (error) {
@@ -51,6 +57,10 @@ const Banner = () => {
     };
 
     fetchLatestRunner();
+    
+    // Refresh latest runner every 30 seconds
+    const interval = setInterval(fetchLatestRunner, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   // ดึงข้อมูลผู้ใช้ล่าสุด
@@ -60,6 +70,7 @@ const Banner = () => {
         const response = await fetch('/api/latest-user');
         if (response.ok) {
           const data = await response.json();
+          console.log('Latest user received:', data); // Debug log
           setLatestUser(data.latestUser);
         }
       } catch (error) {
@@ -70,6 +81,10 @@ const Banner = () => {
     };
 
     fetchLatestUser();
+    
+    // Refresh latest user every 30 seconds
+    const interval = setInterval(fetchLatestUser, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   // สลับข้อความทุก 4 วินาที (3 ข้อความ: runner, message, user)
@@ -476,7 +491,7 @@ const Banner = () => {
                       className="w-8 h-8 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin mx-auto"
                     />
                   ) : (
-                    stats.totalDistance || 0
+                    `${stats.totalDistance || 0}`
                   )}
                 </motion.div>
                 <div className="text-sm font-semibold text-gray-600">กม. รวม</div>
@@ -658,6 +673,28 @@ const Banner = () => {
                               <div className="text-xs sm:text-sm md:text-base">
                                 เวลา: <span className="font-bold text-blue-600">{latestRunner.time}</span>
                               </div>
+                              <div className="text-xs sm:text-sm md:text-base text-gray-600">
+                                ส่งเมื่อ: <span className="font-bold text-purple-600">
+                                  {new Date(latestRunner.submittedAt).toLocaleDateString('th-TH', {
+                                    day: 'numeric',
+                                    month: 'short',
+                                    year: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                  })}
+                                </span>
+                              </div>
+                              {latestRunner.runningDate && (
+                                <div className="text-xs sm:text-sm md:text-base text-gray-600">
+                                  วันที่วิ่ง: <span className="font-bold text-indigo-600">
+                                    {new Date(latestRunner.runningDate).toLocaleDateString('th-TH', {
+                                      day: 'numeric',
+                                      month: 'short',
+                                      year: 'numeric'
+                                    })}
+                                  </span>
+                                </div>
+                              )}
                               <motion.div 
                                 className="inline-block ml-2 mt-1"
                                 animate={{ 
