@@ -21,6 +21,7 @@ const features = [
     desc: "เพื่อนร่วมทางให้กำลังใจ แลกเปลี่ยนเทคนิค และออกวิ่งด้วยกัน",
     icon: "👥",
     color: "from-yellow-500 to-yellow-600",
+    link: "/knowledge",
   },
   {
     title: "ประชาสัมพันธ์งานวิ่ง",

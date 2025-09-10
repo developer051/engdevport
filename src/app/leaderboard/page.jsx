@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import NavBar2 from "../components/NavBar2";
 import Footer from "../components/Footer";
+import { getRankColor, getRankIcon, formatTime, calculateStats, canEditUser } from "../../utils/leaderboardUtils";
 
 const LeaderboardPage = () => {
   const [users, setUsers] = useState([]);
@@ -50,31 +51,6 @@ const LeaderboardPage = () => {
     }
   };
 
-  const getRankColor = (rank) => {
-    switch (rank) {
-      case 1:
-        return "text-yellow-400"; // Gold
-      case 2:
-        return "text-gray-300"; // Silver
-      case 3:
-        return "text-amber-600"; // Bronze
-      default:
-        return "text-gray-400";
-    }
-  };
-
-  const getRankIcon = (rank) => {
-    switch (rank) {
-      case 1:
-        return "🥇";
-      case 2:
-        return "🥈";
-      case 3:
-        return "🥉";
-      default:
-        return `#${rank}`;
-    }
-  };
 
   const fetchUserHistory = async (userId, userName) => {
     setHistoryLoading(true);
@@ -100,12 +76,6 @@ const LeaderboardPage = () => {
     }
   };
 
-  const formatTime = (totalSeconds) => {
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-    return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  };
 
   return (
     <main className="min-h-screen bg-white text-gray-800">
@@ -364,7 +334,7 @@ const LeaderboardPage = () => {
                                 </button>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
-                                {currentUser && currentUser.id === user.id ? (
+                                {canEditUser(currentUser, user) ? (
                                   <Link
                                     href="/running-result/edit"
                                     className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors duration-200"
@@ -399,55 +369,41 @@ const LeaderboardPage = () => {
                   </div>
 
                   {/* Stats Summary */}
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8">
-                    <div className="bg-white border border-gray-200 rounded-lg p-6 text-center shadow-md">
-                      <div className="text-2xl font-bold text-orange-400">
-                        {users.length}
+                  {(() => {
+                    const stats = calculateStats(users);
+                    return (
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8">
+                        <div className="bg-white border border-gray-200 rounded-lg p-6 text-center shadow-md">
+                          <div className="text-2xl font-bold text-orange-400">
+                            {stats.totalUsers}
+                          </div>
+                          <div className="text-sm text-gray-600">สมาชิกทั้งหมด</div>
+                        </div>
+                        <div className="bg-white border border-gray-200 rounded-lg p-6 text-center shadow-md">
+                          <div className="text-2xl font-bold text-green-400">
+                            {stats.totalRuns}
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            การวิ่งทั้งหมด
+                          </div>
+                        </div>
+                        <div className="bg-white border border-gray-200 rounded-lg p-6 text-center shadow-md">
+                          <div className="text-2xl font-bold text-yellow-400">
+                            {stats.totalDistance} km
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            ระยะทางรวมของทุกคน
+                          </div>
+                        </div>
+                        <div className="bg-white border border-gray-200 rounded-lg p-6 text-center shadow-md">
+                          <div className="text-2xl font-bold text-orange-300">
+                            {stats.averageDistance} km
+                          </div>
+                          <div className="text-sm text-gray-600">ระยะทางเฉลี่ย</div>
+                        </div>
                       </div>
-                      <div className="text-sm text-gray-600">สมาชิกทั้งหมด</div>
-                    </div>
-                    <div className="bg-white border border-gray-200 rounded-lg p-6 text-center shadow-md">
-                      <div className="text-2xl font-bold text-green-400">
-                        {users.reduce(
-                          (sum, user) => sum + (user.totalRuns || 0),
-                          0
-                        )}
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        การวิ่งทั้งหมด
-                      </div>
-                    </div>
-                    <div className="bg-white border border-gray-200 rounded-lg p-6 text-center shadow-md">
-                      <div className="text-2xl font-bold text-yellow-400">
-                        {users
-                          .reduce(
-                            (sum, user) => sum + (user.totalDistance || 0),
-                            0
-                          )
-                          .toFixed(2)}{" "}
-                        km
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        ระยะทางรวมของทุกคน
-                      </div>
-                    </div>
-                    <div className="bg-white border border-gray-200 rounded-lg p-6 text-center shadow-md">
-                      <div className="text-2xl font-bold text-orange-300">
-                        {users.length > 0
-                          ? Math.round(
-                              (users.reduce(
-                                (sum, user) => sum + (user.totalDistance || 0),
-                                0
-                              ) /
-                                users.length) *
-                                100
-                            ) / 100
-                          : 0}{" "}
-                        km
-                      </div>
-                      <div className="text-sm text-gray-600">ระยะทางเฉลี่ย</div>
-                    </div>
-                  </div>
+                    );
+                  })()}
                 </>
               )}
             </div>
@@ -580,7 +536,7 @@ const LeaderboardPage = () => {
                         <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                           คะแนน
                         </th>
-                        {currentUser && currentUser.id === selectedUserHistory.userId && (
+                        {canEditUser(currentUser, { id: selectedUserHistory.userId }) && (
                           <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                             แก้ไข
                           </th>
@@ -645,7 +601,7 @@ const LeaderboardPage = () => {
                               {result.score} คะแนน
                             </span>
                           </td>
-                          {currentUser && currentUser.id === selectedUserHistory.userId && (
+                          {canEditUser(currentUser, { id: selectedUserHistory.userId }) && (
                             <td className="px-4 py-4 whitespace-nowrap">
                               <Link
                                 href={`/running-result/edit?id=${result.id}`}

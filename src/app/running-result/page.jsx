@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import NavBar2 from '../components/NavBar2';
 import Link from 'next/link';
+import Tesseract from 'tesseract.js';
 
 export default function RunningResultPage() {
   const [formData, setFormData] = useState({
@@ -18,6 +19,9 @@ export default function RunningResultPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [isOcrProcessing, setIsOcrProcessing] = useState(false);
+  const [ocrProgress, setOcrProgress] = useState(0);
+  const [ocrResult, setOcrResult] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
