@@ -17,16 +17,16 @@ const features = [
     link: "/park",
   },
   {
-    title: "คอมมิวนิตี้",
-    desc: "เพื่อนร่วมทางให้กำลังใจ แลกเปลี่ยนเทคนิค และออกวิ่งด้วยกัน",
-    icon: "👥",
-    color: "from-yellow-500 to-yellow-600",
+    title: "Knowledge Center",
+    desc: "สอนวิ่งอย่างถูกวิธี เพื่อพัฒนาทักษะและป้องกันการบาดเจ็บ",
+    icon: <span style={{ fontSize: "4rem", lineHeight: 1 }}>📚</span>,
+    color: "from-blue-300 to-blue-600",
     link: "/knowledge",
   },
   {
     title: "ประชาสัมพันธ์งานวิ่ง",
     desc: "งานไหนดี งานไหนสนุก เราไปด้วยกัน",
-    icon: "📊",
+    icon: <span style={{ fontSize: "4rem", lineHeight: 1 }}>📢</span>,
     color: "from-pink-500 to-pink-600",
   },
 ];
