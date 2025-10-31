@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { findUserByLoginName, validatePassword } from '@/lib/dbFallback';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+import { getJWTSecret } from '@/lib/auth';
 
 export async function POST(request) {
   try {
@@ -35,6 +34,7 @@ export async function POST(request) {
     }
     
     // Generate JWT token
+    const JWT_SECRET = getJWTSecret();
     const token = jwt.sign(
       { 
         userId: user.originalId || user.id,

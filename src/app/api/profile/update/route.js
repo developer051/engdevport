@@ -41,7 +41,9 @@ export async function POST(request) {
     let userId;
     try {
       const jwt = await import('jsonwebtoken');
-      const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+      const { getJWTSecret } = await import('@/lib/auth');
+      const JWT_SECRET = getJWTSecret();
+      
       const decoded = jwt.verify(token.value, JWT_SECRET);
       
       if (!decoded || !decoded.userId) {
@@ -59,7 +61,7 @@ export async function POST(request) {
         { status: 401 }
       );
     }
-    const user = findUserById(userId);
+    const user = await findUserById(userId);
     
     if (!user) {
       return NextResponse.json(
@@ -154,7 +156,7 @@ export async function POST(request) {
     }
     
     // Update user
-    const updatedUser = updateUser(userId, updateData);
+    const updatedUser = await updateUser(userId, updateData);
     
     if (!updatedUser) {
       return NextResponse.json(
