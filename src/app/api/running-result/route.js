@@ -7,6 +7,65 @@ import jwt from 'jsonwebtoken';
 import { findUserById, updateUserScore } from '@/lib/dbFallback';
 import { getJWTSecret } from '@/lib/auth';
 
+// GET: ดึงรายการผลการวิ่ง
+export async function GET(request) {
+  try {
+    // ตรวจสอบ authentication (optional - ถ้าต้องการให้ดึงเฉพาะของตัวเอง)
+    const cookieStore = await cookies();
+    const token = cookieStore.get('token');
+    
+    let userId = null;
+    if (token) {
+      try {
+        const JWT_SECRET = getJWTSecret();
+        const decoded = jwt.verify(token.value, JWT_SECRET);
+        userId = decoded.userId;
+      } catch (error) {
+        // ถ้า token ไม่ valid ก็ให้ดึงทั้งหมด (public)
+        console.log('Token invalid, returning all results');
+      }
+    }
+
+    // ดึงข้อมูลผลการวิ่ง
+    const resultsPath = path.join(process.cwd(), 'data', 'running-results.json');
+    let runningResults = [];
+    
+    if (existsSync(resultsPath)) {
+      try {
+        const fs = await import('fs/promises');
+        const data = await fs.readFile(resultsPath, 'utf8');
+        runningResults = JSON.parse(data);
+      } catch (error) {
+        console.error('Error reading running results:', error);
+      }
+    }
+
+    // ถ้ามี userId ให้กรองเฉพาะของ user นั้น, ถ้าไม่มีให้ดึงทั้งหมด
+    if (userId) {
+      runningResults = runningResults.filter(result => 
+        result.userId === userId || result.userId === userId.toString()
+      );
+    }
+
+    // เรียงลำดับตามวันที่ส่ง (ใหม่ไปเก่า)
+    runningResults.sort((a, b) => {
+      return new Date(b.submittedAt) - new Date(a.submittedAt);
+    });
+
+    return NextResponse.json({
+      results: runningResults,
+      count: runningResults.length
+    });
+
+  } catch (error) {
+    console.error('Error fetching running results:', error);
+    return NextResponse.json(
+      { error: 'เกิดข้อผิดพลาดในการดึงข้อมูลผลการวิ่ง' },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(request) {
   try {
     // ตรวจสอบ authentication
