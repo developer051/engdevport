@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { findUserById } from '@/lib/dbFallback';
+import { getJWTSecret } from '@/lib/auth';
 
 export async function GET() {
   try {
@@ -20,7 +21,7 @@ export async function GET() {
     // ตรวจสอบ JWT token
     try {
       const jwt = await import('jsonwebtoken');
-      const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+      const JWT_SECRET = getJWTSecret();
       
       const decoded = jwt.verify(token.value, JWT_SECRET);
       if (!decoded || !decoded.userId) {

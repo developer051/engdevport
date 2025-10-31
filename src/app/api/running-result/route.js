@@ -5,8 +5,7 @@ import path from 'path';
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 import { findUserById, updateUserScore } from '@/lib/dbFallback';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+import { getJWTSecret } from '@/lib/auth';
 
 export async function POST(request) {
   try {
@@ -24,8 +23,18 @@ export async function POST(request) {
     // ตรวจสอบ JWT token
     let decoded;
     try {
+      const JWT_SECRET = getJWTSecret();
       decoded = jwt.verify(token.value, JWT_SECRET);
     } catch (error) {
+      // ถ้าเป็น JWT_SECRET error ให้ return 500
+      if (error.message?.includes('JWT_SECRET')) {
+        console.error('JWT_SECRET configuration error:', error);
+        return NextResponse.json(
+          { error: 'Server configuration error' },
+          { status: 500 }
+        );
+      }
+      // ถ้าเป็น JWT verification error ให้ return 401
       return NextResponse.json(
         { error: 'Token ไม่ถูกต้อง กรุณาเข้าสู่ระบบใหม่' },
         { status: 401 }

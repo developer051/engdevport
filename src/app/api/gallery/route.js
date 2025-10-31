@@ -23,7 +23,8 @@ export async function POST(request) {
     // ตรวจสอบ JWT token
     try {
       const jwt = await import('jsonwebtoken');
-      const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+      const { getJWTSecret } = await import('@/lib/auth');
+      const JWT_SECRET = getJWTSecret();
       
       const decoded = jwt.verify(token.value, JWT_SECRET);
       if (!decoded || !decoded.userId) {
