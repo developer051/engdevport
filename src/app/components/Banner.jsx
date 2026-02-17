@@ -1,6 +1,9 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 
 const Banner = () => {
   const [stats, setStats] = useState({
@@ -436,24 +439,24 @@ const Banner = () => {
                 }}
               />
               
-              {/* Enhanced Main Image with Zoom Animation */}
+              {/* Enhanced Main Image with Zoom Animation - ใช้ next/image + priority สำหรับ LCP */}
               <motion.div
                 className="relative z-10"
                 initial={{ opacity: 0, y: 30, rotateY: -15 }}
                 animate={{ opacity: 1, y: 0, rotateY: 0 }}
                 transition={{ duration: 1, delay: 0.3 }}
               >
-                <motion.img
-                  src="/rabbittran.png"
-                  alt="RabbitLife Runner"
-                  className="w-full h-auto drop-shadow-2xl filter contrast-110 brightness-110"
-                  variants={zoomVariants}
-                  animate="animate"
-                  style={{
-                    imageRendering: 'high-quality',
-                    WebkitImageRendering: 'high-quality'
-                  }}
-                />
+                <motion.div variants={zoomVariants} animate="animate" className="relative w-full">
+                  <Image
+                    src="/rabbittran.png"
+                    alt="RabbitLife Runner"
+                    width={512}
+                    height={512}
+                    priority
+                    className="w-full h-auto drop-shadow-2xl"
+                    sizes="(max-width: 1024px) 100vw, 512px"
+                  />
+                </motion.div>
               </motion.div>
 
               {/* Additional decorative elements */}

@@ -1,11 +1,12 @@
 import { Prompt } from "next/font/google";
 import "./globals.css";
 
-
+// โหลดเฉพาะ weight ที่ใช้จริง - ลดจาก 5 เหลือ 2 เพื่อ performance
 const prompt = Prompt({
   variable: "--font-prompt",
   subsets: ["latin", "thai"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "600"],
+  display: "swap",
 });
 
 export const metadata = {
